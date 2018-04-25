@@ -1,0 +1,27 @@
+17/04/2018 - Group Meeting
+
+1. who are the intended users: are they novice, intermediate or expert, or all sorts of users (do we even understand what this means?)
+All sorts of users (since we can set difficulty to make the game more challenging)
+2. what sort of features are basic to the application (i.e. needed by every user)?
+Basic interface (Menus, continue, select difficulty, game over screen, help, exit button)
+Always have to have >= 1 solutions
+3. what sort of features are needed by different categories of users: how can the interface handle seemingly different requirements?
+If the difficult increases then increase the number of cars on screen
+4. what sort of help or hints (if any) should the system be able to provide to users (and how and when is this help given)?
+Base on the current state of the board, highlight the next car to be moved
+Help button to display texts (how to play the game)
+5. what platforms with what form factors is the system designed to run on?
+Runs on PC
+
+Algorithms:
+BFS
+A*
+IDA*
+
+Classes:
+Board (size, difficulty, state) - 2d array (Board generator, Board solver, add cars, array2graph)
+Car (length, direction, color)
+Player (id, score, moves)
+Interface (menu, help, hints...)
+System (create board, create players, save highscores)
+
