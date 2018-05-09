@@ -1,13 +1,9 @@
 package GridLock;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.text.BoxView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 
 public class GameFrame {
 
@@ -41,10 +37,6 @@ public class GameFrame {
         background.setBounds(800,800,800,800);
         gameFrame.add(background);
 
-        //JPanel controlPanel = new JPanel();
-        //controlPanel.setLayout(null);
-        //gameFrame.setContentPane(controlPanel);
-
         // Button for creating new game
         JButton newGameButton = new JButton("New Game");
         newGameButton.setBounds(320,250,100,60);
@@ -53,7 +45,7 @@ public class GameFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // redirect to difficulty selection page
-                // difficultySelection();
+                difficultySelection();
             }
         });
         // Button for Setting
@@ -64,7 +56,7 @@ public class GameFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // redirect to setting page
-                //settingPage();
+                // settingPage();
             }
         });
         // Button for quit game
@@ -78,8 +70,26 @@ public class GameFrame {
             }
         });
 
-        //gameFrame.pack();
         gameFrame.setVisible(true);
+    }
+
+    public void difficultySelection() {
+
+        gameFrame.repaint();
+        gameFrame.remove(background);
+
+        JPanel difficulty_background = new JPanel() {
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon img = new ImageIcon(GameFrame.class.getClassLoader().getResource("difficulty_background.jpg"));
+                g.drawImage(img.getImage(), 0, 0, null);
+            }
+        };
+        difficulty_background.setBounds(800,800,800,800);
+        difficulty_background.setLayout(null);
+        gameFrame.add(difficulty_background);
+        gameFrame.setVisible(true);
+
     }
 
 }
