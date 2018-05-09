@@ -11,12 +11,12 @@ public class Car{
 		if (carId < 1) throw new IllegalArgumentException("Car ID must be greater than 0");
 		else this.carId = carId;
 		
-		if (posCol > 6 || posCol < 1) throw new IllegalArgumentException("Col position must be between 1 - 6");
-		else this.posCol = posCol;
-
 		if (posRow < 1 || posRow > 6) throw new IllegalArgumentException("Row position must be between 1 - 6");
 		else this.posRow = posRow;
 		
+		if (posCol < 0 || posCol > 5) throw new IllegalArgumentException("Col position must be between 0 - 5");
+		else this.posCol = posCol;
+
 		if (length > 3 || length < 2) throw new IllegalArgumentException("Length must be between 2 - 3");
 		else this.length = length;
 		
@@ -37,15 +37,11 @@ public class Car{
 	}
 
 	public boolean equals(Car comparedCar) {
-		if (this.carId == comparedCar.carId
-			&& this.posCol == comparedCar.posCol
-			&& this.posRow == comparedCar.posRow
-			&& this.length == comparedCar.length
-			&& this.direction == comparedCar.direction) {
-			return true;
-		}
+		return (getPosCol() == comparedCar.getPosCol()
+			&& getPosRow() == comparedCar.getPosRow()
+			&& getLength() == comparedCar.getLength()
+			&& getDirection() == comparedCar.getDirection());
 		
-		return false;
 	}
 	
 	@Override
