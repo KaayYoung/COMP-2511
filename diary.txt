@@ -25,3 +25,23 @@ Player (id, score, moves)
 Interface (menu, help, hints...)
 System (create board, create players, save highscores)
 
+08/05/2018
+Interface:
+Board (6x6 Grid - 800px x 600px)
+Car (Max Width/Height = 3 Blocks, fill with color?)
+Buttons (New Game, Restart, Difficulty/Select Stage, Solve, Quit)
+Menu (Containing buttons?)
+Logic:
+Car select: Only 1 car can be selected at a time, once selected, the car can be dragged horizontally/vertically based on it’s attribute
+Car collision: A car must stop moving when collided with another car or wall
+Grid snapping: A car must snap into blocks closest to its position
+Restart button will recreate the initial state of that same stage
+New Game will generate another random stage
+Solve/Hint button will highlight the car that needs to move next
+Check for car positions and snap it into grid
+
+09/05/2018
+Merge Board and state
+Create a simple bfs search
+Everything works as intended
+todo: add better search algos
