@@ -46,6 +46,7 @@ public class GameFrame {
             public void actionPerformed(ActionEvent e) {
                 // redirect to difficulty selection page
                 difficultySelection();
+                gameFrame.requestFocus();
             }
         });
         // Button for Setting
@@ -85,11 +86,27 @@ public class GameFrame {
                 g.drawImage(img.getImage(), 0, 0, null);
             }
         };
+
         difficulty_background.setBounds(800,800,800,800);
         difficulty_background.setLayout(null);
+
+        // Create Easy difficulty button
+        Button easy = new Button("Easy");
+        easy.setBounds(320,250,100,60);
+        difficulty_background.add(easy);
+
+        // Create Medium difficulty button
+        Button medium = new Button("Medium");
+        medium.setBounds(320,350,100,60);
+        difficulty_background.add(medium);
+
+        // Create Expert difficulty button
+        Button expert = new Button("Expert");
+        expert.setBounds(320,470,100,60);
+        difficulty_background.add(expert);
+
         gameFrame.add(difficulty_background);
         gameFrame.setVisible(true);
-
     }
 
 }
