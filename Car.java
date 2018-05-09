@@ -7,7 +7,7 @@ public class Car{
 	private int posRow;		// starting row
 	
 	
-	public Car(int carId, int posCol, int posRow, int length, int direction) {
+	public Car(int carId, int posRow, int posCol, int length, int direction) {
 		if (carId < 1) throw new IllegalArgumentException("Car ID must be greater than 0");
 		else this.carId = carId;
 		
@@ -20,13 +20,13 @@ public class Car{
 		if (length > 3 || length < 2) throw new IllegalArgumentException("Length must be between 2 - 3");
 		else this.length = length;
 		
-		if (direction != 0 || direction != 1) throw new IllegalArgumentException("Direction must be 1 (Vertical) or 0 (Horizontal)");
+		if (direction != 0 && direction != 1) throw new IllegalArgumentException("Direction must be 1 (Vertical) or 0 (Horizontal)");
 		else if (direction == 1 && (posRow - length < 0)) throw new IllegalArgumentException("Invalid position. Car is out of bound vertically");
 		else if (direction == 0 && (posCol + length > 6)) throw new IllegalArgumentException("Invalid position. Car is out of bound horizontally");
 		else this.direction = direction;	
 	}
 	
-	public boolean changePos(int col, int row) {
+	public boolean changePos(int row, int col) {
 		if (posCol > 6 && posCol < 1 && posRow < 1 && posRow > 6) {
 			posCol = col;
 			posRow = row;
@@ -50,7 +50,7 @@ public class Car{
 	
 	@Override
 	public String toString() {
-		return "Car "+carId+": "+posCol+", "+posRow+", "+length+", "+direction+".";
+		return "Car "+carId+": "+posRow+", "+posCol+", "+length+", "+direction+".";
 	}
 	
 	public int getCarId() {

@@ -1,8 +1,6 @@
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 public class Board {
 	private int boardSize;
@@ -14,6 +12,8 @@ public class Board {
 		this.boardSize = 6;
 		this.cars = new HashMap<Integer, Car>(cars);
 		this.carCount = cars.size();
+		this.gameBoard = new int[6][6];
+		updateGameBoard();
 	}
 	
 	public int getBoardSize() {
@@ -28,14 +28,15 @@ public class Board {
 		this.gameBoard = gameBoard;
 	}
 	
-	public int[][] getGameBoard() {
-		@SuppressWarnings("rawtypes")
-		Iterator i = cars.entrySet().iterator();
+	public void updateGameBoard() {
+		for (int i = 0; i < 6; i++) {
+			for (int j = 0; j < 6; j++) {
+				getGameBoard()[i][j] = 0;
+			}
+		}
 		
-		while(i.hasNext()) {
-			@SuppressWarnings("rawtypes")
-			Map.Entry me = (Map.Entry)i.next();
-			Car currentCar = (Car) me.getValue();
+		for (int key : getCars().keySet()) {
+			Car currentCar = getCars().get(key);
 			if (currentCar.getDirection() == 0) {
 				for (int j = 0; j < currentCar.getLength(); j++) {
 					gameBoard[currentCar.getPosRow() - 1][currentCar.getPosCol() + j] = currentCar.getCarId();
@@ -47,26 +48,63 @@ public class Board {
 				}
 			}
 		}
-		
+	}
+	
+	public int[][] getGameBoard() {
 		return gameBoard;
 	}
 	
 	public ArrayList<Board> getPossibleMoves() {
 		ArrayList<Board> moves = new ArrayList<Board>();
 		
-		int[][] board = getGameBoard();
+		HashMap<Integer, Car> carsCopy;
 		
-		HashMap<Integer, Car> carsCopy = new HashMap<Integer, Car>(getCars());;
+		for (int key : getCars().keySet()) {	
+			Car currentCar = getCars().get(key);
+			
+			int curId = currentCar.getCarId();
+			int curRow = currentCar.getPosRow();
+			int curCol = currentCar.getPosCol();
+			int curLength = currentCar.getLength();
+			int curDirection = currentCar.getDirection();
+			
+			if (curDirection == 1) {
+				// Move Left
+				if(curCol >= 1 && getGameBoard()[curRow - 1][curCol - 1] == 0) {
+					Car newCar = new Car(curId, curRow, curCol - 1, curLength, 1);
+					carsCopy = new HashMap<Integer, Car>(cars);
+					carsCopy.replace(curId, newCar);
+					moves.add(new Board(carsCopy));
+				}
+				
+				// Move Right
+				if ((curCol + curLength) >= 1 && getGameBoard()[curRow - 1][curCol + curLength] == 0) {
+					Car newCar = new Car(curId, curRow, curCol + 1, curLength, 1);
+					carsCopy = new HashMap<Integer, Car>(cars);
+					carsCopy.replace(curId, newCar);
+					moves.add(new Board(carsCopy));
+				}
+			}
+			else {
+				// Move Up
+				if((curRow - curLength >= 1) && getGameBoard()[curRow - curLength - 1][curCol	] == 0) {
+					Car newCar = new Car(curId, curRow - 1, curCol, curLength, 1);
+					carsCopy = new HashMap<Integer, Car>(cars);
+					carsCopy.replace(curId, newCar);
+					moves.add(new Board(carsCopy));
+				}
+				
+				// Move Down
+				if (curRow <= 5 && getGameBoard()[curRow][curCol] == 0) {
+					Car newCar = new Car(curId, curRow + 1, curCol, curLength, 1);
+					carsCopy = new HashMap<Integer, Car>(cars);
+					carsCopy.replace(curId, newCar);
+					moves.add(new Board(carsCopy));
+				}
+			}
+		}
 		
 		return moves;
-	}
-	
-	public boolean addCars() {
-		boolean canAdd = false;
-		/**
-		 *  to_to
-		 */
-		return canAdd;
 	}
 	
 	public boolean isSolved() {
@@ -79,5 +117,26 @@ public class Board {
 
 	public HashMap<Integer, Car> getCars() {
 		return cars; 
+	}
+	
+	public boolean equals(Board otherBoard) {
+		return getCars().equals(otherBoard.getCars());
+	}
+	
+	public void printBoard() {
+		for (int i = 0; i < 6; i++) {
+			for (int j = 0; j < 6; j++) {
+				System.out.print(getGameBoard()[i][j]);
+			}
+			System.out.println();
+		}
+	}
+	
+	public void printCars() {
+		for (int key : getCars().keySet()) {	
+			Car currentCar = getCars().get(key);
+			
+			System.out.println(currentCar);
+		}
 	}
 }
