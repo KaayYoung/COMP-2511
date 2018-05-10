@@ -37,6 +37,9 @@ public class GameFrame extends JFrame{
         background.setBounds(800,800,800,800);
         this.setContentPane(background);
 
+
+
+
         // Button for creating new game
         JButton newGameButton = new JButton("New Game");
         newGameButton.setBounds(320,250,100,60);
@@ -45,11 +48,15 @@ public class GameFrame extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // redirect to difficulty selection page
-                dispose();
+                // dispose();
                 difficultySelection();
-                //gameFrame.requestFocus();
+
             }
         });
+
+
+
+
         // Button for Setting
         JButton settingButton = new JButton("Setting");
         settingButton.setBounds(320,350,100,60);
@@ -78,8 +85,8 @@ public class GameFrame extends JFrame{
 
     public void difficultySelection() {
 
-        //this.repaint();
-        //this.remove(background);
+//        this.repaint();
+//        this.remove(background);
 
         JPanel difficulty_background = new JPanel() {
             public void paintComponent(Graphics g) {
@@ -142,6 +149,7 @@ public class GameFrame extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Back to Menu Page
+                setContentPane(background);
             }
         });
 
