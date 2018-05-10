@@ -2,8 +2,10 @@
 
 about the board. 
 things need to do:
-1. combine the text board and the car
-2. when dragging the car
-  a. if mouse cross the other car, it will drag the other car as well
-  b. how to ask the car to stop if it hit the edge of the board or another car
+1. add image(contains grid) into the textPanel, run the car on the image
+
+2. when dragging the car, how to ask the car to stop if it hit the edge of the board or another car
+
 3. return the state to the algo
+
+4. fill the color into the car
