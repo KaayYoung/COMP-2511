@@ -31,7 +31,7 @@ public class CarComponent extends JComponent {
 		//this.setOpaque(false);
 		this.setVisible(true);
 		this.setFocusable(true);
-		
+		// search the horizontal car and store into carList
 		for(int row = 0; row < 6; row++) {
 			for(int col = 0; col < 6; col++) {
 			
@@ -51,7 +51,8 @@ public class CarComponent extends JComponent {
 				}		
 			}
 		}
-
+		
+		// search the vertical car and store into carList
 		for(int col = 0; col < 6; col++) {
 			for(int row = 0;  row < 6; row++) {
 				
@@ -111,6 +112,7 @@ public class CarComponent extends JComponent {
 				
 				for(int i = 0; i < carList.size(); i++) {
 					CarShape c = carList.get(i);
+					// move the car has mousePoint
 					if(c.contains(mousePoint)) {
 						int d = c.getDirection();
 						if(d == 1) {
