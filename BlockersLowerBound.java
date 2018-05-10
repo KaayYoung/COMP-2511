@@ -12,13 +12,13 @@ public class BlockersLowerBound implements Heuristic{
 		
 		int h = 0;
 		
-		while(total <= 6)
+		while(total < 6)
 		{
-			int Curcar = 1;
-			if(board[startRow][total] != Curcar && board[startRow][total] != 0)
+			//int Curcar = 1;
+			if(board[startRow][total] != 1 && board[startRow][total] != 0)
 			{
 				h++;
-				Curcar = board[startRow][total];
+				//Curcar = board[startRow][total];
 			}
 			total++;
 		}

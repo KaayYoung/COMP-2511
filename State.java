@@ -1,5 +1,6 @@
 package search;
 
+import java.util.ArrayList;
 
 public class State implements Comparable<State> {
 	private Board currentBoard;
@@ -73,5 +74,43 @@ public class State implements Comparable<State> {
 	public void setpreState(State pre)
 	{
 		this.preState = pre;
+	}
+	
+	
+	public ArrayList<moves> reconstruct_path()
+	{
+		ArrayList<moves> reverse = new ArrayList<moves>();
+		State cur = this;
+		int i = 0;
+		while(cur.getPreState()!=null)
+		{
+			reverse.add(cur.getMove());
+			System.out.println();
+			cur.currentBoard.printBoard();
+//			System.out.println();
+//			System.out.println("current move is " + i);
+//			System.out.println("car ID is " + cur.getMove().getId());
+//			System.out.println("car dir is " + cur.getMove().getDir());
+//			System.out.println("num of move is " + cur.getMove().numofMove());
+			cur = cur.getPreState();
+			i++;
+		}
+		System.out.println("totoal number of moves is "+ i);
+		ArrayList<moves> path = new ArrayList<moves>();
+		while(i>0)
+		{
+			i--;
+			path.add(reverse.get(i));
+//			System.out.println();
+//			System.out.println("current move is " + i);
+//			System.out.println("car ID is " + m.getId());
+//			System.out.println("car dir is " + m.getDir());
+//			System.out.println("num of move is " + m.numofMove());
+			
+			//i--;
+		}
+		
+		return path;
+		
 	}
 }

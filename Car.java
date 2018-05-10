@@ -14,7 +14,7 @@ public class Car{
 		if (carId < 1) throw new IllegalArgumentException("Car ID must be greater than 0");
 		else this.carId = carId;
 		
-		if (posCol > 6 || posCol < 1) throw new IllegalArgumentException("Col position must be between 1 - 6");
+		if (posCol > 5 || posCol < 0) throw new IllegalArgumentException("Col position must be between 1 - 6");
 		else this.posCol = posCol;
 
 		if (posRow < 1 || posRow > 6) throw new IllegalArgumentException("Row position must be between 1 - 6");

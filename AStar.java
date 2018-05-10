@@ -2,12 +2,14 @@ package search;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.PriorityQueue;
+import java.util.Set;
 
-public class AStar {
+public class AStar implements SearchAlgo{
 	
 	
-	
+	@Override
 	public ArrayList<moves> getPath(Board iniBoard)
 	{
 		State iniState = new State(iniBoard);
@@ -16,7 +18,7 @@ public class AStar {
 		iniState.setPathCostH(iniH);
 		iniState.setPathCostF();
 		//set of nodes already visited
-//		PriorityQueue<State> closed = new PriorityQueue<State>(); 
+		Set<Board> closed = new LinkedHashSet<Board>();
 		//set of nodes discovered but not visited yet
 		PriorityQueue<State> open = new PriorityQueue<State>(); 
 		open.add(iniState);
@@ -24,17 +26,26 @@ public class AStar {
 		{
 			State currentState = open.poll();
 			Board curBoard = currentState.getCurrentBoard();
+//			System.out.println();
+//			curBoard.printBoard();
 			if(curBoard.isSolved())
 			{
-				return reconstruct_path(currentState);
+//				curBoard.printBoard();
+				return currentState.reconstruct_path();
 			}
-//			closed.add(currentState);
+			//if(!closed.contains(curBoard))
+			closed.add(curBoard);
 			int gCur = currentState.getPathCostG(); 
 			int gNex = gCur + 1;
 			HashMap<Board, moves> possible = curBoard.getPossibleMoves();
 			for(Board nex : possible.keySet())
 			{
 				if(nex.equals(curBoard)) continue;
+				//moves n = possible.get(nex);
+				//moves m = new moves(n.getId(), n.getDir(), n.numofMove());
+				if(closed.contains(nex)) continue;
+//				System.out.println();
+//				System.out.println("size of closed list " + closed.size());
 				moves m = possible.get(nex);
 				State s = new State(nex);
 				s.setMove(m);
@@ -43,6 +54,7 @@ public class AStar {
 				s.setPathCostF();
 				s.setpreState(currentState);
 				open.add(s);
+				
 				
 			}
 			
@@ -54,26 +66,7 @@ public class AStar {
 	}
 	
 	
-	private ArrayList<moves> reconstruct_path(State finalState)
-	{
-		ArrayList<moves> reverse = new ArrayList<moves>();
-		State cur = finalState;
-		while(cur!=null)
-		{
-			reverse.add(cur.getMove());
-			cur = cur.getPreState();
-		}
-		int i = reverse.size() - 1;
-		ArrayList<moves> path = new ArrayList<moves>();
-		while(i>=0)
-		{
-			path.add(reverse.get(i));
-			i--;
-		}
-		
-		return path;
-		
-	}
+	
 
 	
 	

@@ -68,10 +68,10 @@ public class Board {
 			int curLength = currentCar.getLength();
 			int curDirection = currentCar.getDirection();
 			
-			if (curDirection == 1) {
+			if (curDirection == 0) {
 				// Move Left
 				if(curCol >= 1 && getGameBoard()[curRow - 1][curCol - 1] == 0) {
-					Car newCar = new Car(curId, curRow, curCol - 1, curLength, 1);
+					Car newCar = new Car(curId, curRow, curCol - 1, curLength, curDirection);
 					carsCopy = new HashMap<Integer, Car>(cars);
 					carsCopy.replace(curId, newCar);
 					moves l = new moves(newCar.getCarId(), 2, 1);
@@ -80,8 +80,8 @@ public class Board {
 				}
 				
 				// Move Right
-				if ((curCol + curLength) >= 1 && getGameBoard()[curRow - 1][curCol + curLength] == 0) {
-					Car newCar = new Car(curId, curRow, curCol + 1, curLength, 1);
+				if ((curCol + curLength) <=5 && getGameBoard()[curRow - 1][curCol + curLength] == 0) {
+					Car newCar = new Car(curId, curRow, curCol + 1, curLength, curDirection);
 					carsCopy = new HashMap<Integer, Car>(cars);
 					carsCopy.replace(curId, newCar);
 					moves r = new moves(newCar.getCarId(), 0, 1);
@@ -92,7 +92,7 @@ public class Board {
 			else {
 				// Move Up
 				if((curRow - curLength >= 1) && getGameBoard()[curRow - curLength - 1][curCol	] == 0) {
-					Car newCar = new Car(curId, curRow - 1, curCol, curLength, 1);
+					Car newCar = new Car(curId, curRow - 1, curCol, curLength, curDirection);
 					carsCopy = new HashMap<Integer, Car>(cars);
 					carsCopy.replace(curId, newCar);
 //					moves.add(new Board(carsCopy));
@@ -102,7 +102,7 @@ public class Board {
 				
 				// Move Down
 				if (curRow <= 5 && getGameBoard()[curRow][curCol] == 0) {
-					Car newCar = new Car(curId, curRow + 1, curCol, curLength, 1);
+					Car newCar = new Car(curId, curRow + 1, curCol, curLength, curDirection);
 					carsCopy = new HashMap<Integer, Car>(cars);
 					carsCopy.replace(curId, newCar);
 //					moves.add(new Board(carsCopy));
@@ -133,7 +133,6 @@ public class Board {
 	
 	public boolean equals(Board otherBoard)
 	{
-		if(!this.equals(otherBoard)) return false;
 		if(this.boardSize != otherBoard.boardSize) return false;
 		if(!this.gameBoard.equals(otherBoard.gameBoard)) return false;
 		if(!this.cars.equals(otherBoard.cars)) return false;
