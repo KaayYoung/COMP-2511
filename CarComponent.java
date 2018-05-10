@@ -16,13 +16,14 @@ public class CarComponent extends JComponent {
 	private int count;
 	private int direction;
 	private ArrayList<CarShape> carList = new ArrayList<CarShape>();
+	private static final int Car_width = 150;
 	
-	int matrix[][] = {{1,1,0,0,2,0},
-					  {0,0,0,0,2,0},
-					  {0,6,6,0,2,3},
-					  {4,4,4,0,0,3},
-					  {0,5,0,0,0,3},
-					  {0,5,0,0,0,0}};
+	int matrix[][] = {{1,1,0,0,0,0},
+					  {0,0,0,0,5,0},
+					  {0,0,6,6,5,0},
+					  {4,4,4,0,0,0},
+					  {0,0,0,7,7,7},
+					  {0,0,0,0,0,0}};
 	
 	
 	
@@ -41,17 +42,16 @@ public class CarComponent extends JComponent {
 					if(col != 5 && matrix[row][col+1] == num) {
 						if(col != 4 && matrix[row][col+2] == num) {
 							// x , y, width, length, direction
-							carList.add(new CarShape(col*100, row*100, 100,3, 0));
+							carList.add(new CarShape(col*Car_width, row*Car_width, Car_width,3, 0));
 							col = col + 2;
 						} else {
-							carList.add(new CarShape(col*100, row*100, 100,2, 0));
+							carList.add(new CarShape(col*Car_width, row*Car_width, Car_width,2, 0));
 							col = col + 1;
 						}
 					}	
 				}		
 			}
 		}
-		
 		// search the vertical car and store into carList
 		for(int col = 0; col < 6; col++) {
 			for(int row = 0;  row < 6; row++) {
@@ -61,10 +61,10 @@ public class CarComponent extends JComponent {
 					int num = matrix[row][col];
 					if(row != 5 && matrix[row+1][col] == num) {
 						if(row != 4 && matrix[row+2][col] == num) {
-							carList.add(new CarShape(col*100, row*100, 100,3, 1));
+							carList.add(new CarShape(col*Car_width, row*Car_width, Car_width,3, 1));
 							row = row + 2;
 						}else {
-							carList.add(new CarShape(col*100, row*100, 100,2, 1));
+							carList.add(new CarShape(col*Car_width, row*Car_width, Car_width,2, 1));
 							row = row + 1;
 						}
 					}
