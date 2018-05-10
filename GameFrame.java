@@ -20,7 +20,7 @@ public class GameFrame extends JFrame{
 
     public void prepareGUI() {
         this.setTitle("Grid Lock");
-        this.setBounds(800,800,800,800);
+        this.setBounds(1500,1500,1500,1500);
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // if don't add this line, the program won't stop when click cross
 
@@ -29,12 +29,13 @@ public class GameFrame extends JFrame{
                 super.paintComponent(g);
 
                 ImageIcon img=new ImageIcon(GameFrame.class.getClassLoader().getResource("menu_background.png"));
-                g.drawImage(img.getImage(), 0, 0, null);
+                //Image a = img.getImage().getScaledInstance(1500,1500, Image.SCALE_DEFAULT);
+                g.drawImage(img.getImage(), 0, 0, 1500,1500, this);
             }
         };
 
         background.setLayout(null);
-        background.setBounds(800,800,800,800);
+        background.setBounds(1500,1500,1500,1500);
         this.setContentPane(background);
 
 
@@ -42,15 +43,15 @@ public class GameFrame extends JFrame{
 
         // Button for creating new game
         JButton newGameButton = new JButton("New Game");
-        newGameButton.setBounds(320,250,100,60);
+        newGameButton.setBounds(650,500,200,120);
+        newGameButton.setFont(new Font("Arial", Font.PLAIN, 25));
         background.add(newGameButton);
         newGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // redirect to difficulty selection page
-                // dispose();
                 difficultySelection();
-
+                requestFocus();
             }
         });
 
@@ -59,19 +60,21 @@ public class GameFrame extends JFrame{
 
         // Button for Setting
         JButton settingButton = new JButton("Setting");
-        settingButton.setBounds(320,350,100,60);
+        settingButton.setBounds(650,750,200,120);
+        settingButton.setFont(new Font("Arial", Font.PLAIN, 25));
         background.add(settingButton);
         settingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // redirect to setting page
-                //dispose();
-                //settingPage();
+                settingPage();
+                requestFocus();
             }
         });
         // Button for quit game
         JButton quitButton = new JButton("Quit");
-        quitButton.setBounds(320,470,100,60);
+        quitButton.setBounds(650,1050,200,120);
+        quitButton.setFont(new Font("Arial", Font.PLAIN, 25));
         background.add(quitButton);
         quitButton.addActionListener(new ActionListener() {
             @Override
@@ -85,23 +88,24 @@ public class GameFrame extends JFrame{
 
     public void difficultySelection() {
 
-//        this.repaint();
+        this.repaint();
 //        this.remove(background);
 
         JPanel difficulty_background = new JPanel() {
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("difficulty_background.jpg")));
-                g.drawImage(img.getImage(), 0, 0, null);
+                g.drawImage(img.getImage(), 0, 0,1500,1500, this);
             }
         };
 
-        difficulty_background.setBounds(800,800,800,800);
+        difficulty_background.setBounds(1500,1500,1500,1500);
         difficulty_background.setLayout(null);
 
         // Create Easy difficulty button
         JButton easy = new JButton("Easy");
-        easy.setBounds(320,200,100,60);
+        easy.setBounds(650,400,200,120);
+        easy.setFont(new Font("Arial", Font.PLAIN, 25));
         difficulty_background.add(easy);
         easy.addActionListener(new ActionListener() {
             @Override
@@ -113,7 +117,8 @@ public class GameFrame extends JFrame{
 
         // Create Medium difficulty button
         JButton medium = new JButton("Medium");
-        medium.setBounds(320,300,100,60);
+        medium.setBounds(650,650,200,120);
+        medium.setFont(new Font("Arial", Font.PLAIN, 25));
         difficulty_background.add(medium);
         medium.addActionListener(new ActionListener() {
             @Override
@@ -125,7 +130,8 @@ public class GameFrame extends JFrame{
 
         // Create Expert difficulty button
         JButton expert = new JButton("Expert");
-        expert.setBounds(320,420,100,60);
+        expert.setBounds(650,900,200,120);
+        expert.setFont(new Font("Arial", Font.PLAIN, 25));
         difficulty_background.add(expert);
         expert.addActionListener(new ActionListener() {
             @Override
@@ -138,12 +144,12 @@ public class GameFrame extends JFrame{
         // Create Back button
         JButton back = new JButton();
         try {
-            back.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("back.jpg"))));
+            back.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("back.png"))));
         } catch (Exception e) {
             System.out.println("No such image");
             System.exit(0);
         }
-        back.setBounds(320,550,100,60);
+        back.setBounds(650,1200,200,120);
         difficulty_background.add(back);
         back.addActionListener(new ActionListener() {
             @Override
@@ -153,11 +159,47 @@ public class GameFrame extends JFrame{
             }
         });
 
-        validate();
-
         this.setContentPane(difficulty_background);
         //this.setContentPane(new DifficultyFrame(this));
         this.setVisible(true);
     }
+
+    public void settingPage() {
+
+        this.repaint();
+
+        JPanel setting_background = new JPanel() {
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("setting_background.png")));
+                g.drawImage(img.getImage(), 0, 0, 1500,1500, this);
+            }
+        };
+
+        setting_background.setBounds(1500,1500,1500,1500);
+        setting_background.setLayout(null);
+
+        // Add back button
+        JButton back = new JButton();
+        try {
+            back.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("back.png"))));
+        } catch (Exception e) {
+            System.out.println("No such image");
+            System.exit(0);
+        }
+        back.setBounds(320,550,100,60);
+        setting_background.add(back);
+        back.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Back to Menu Page
+                setContentPane(background);
+            }
+        });
+
+        this.setContentPane(setting_background);
+        this.setVisible(true);
+    }
+
 
 }
