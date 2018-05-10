@@ -27,34 +27,19 @@ public class CarMove{
 	    score.setBounds(1000, 0, 200, 150);
 	    score.setFont(new Font("Serif", Font.BOLD, 60));
 	    
-	    JPanel board = new JPanel(new GridLayout(6, 6, 20, 20));
-	    board.setBounds(300, 300, 800, 800);
-	    
-	    board.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
-
-	    for (int i =0; i<(6*6); i++){
-	        JLabel label = new JLabel();
-	        label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-	        board.add(label);
-	    }
+	    JPanel board = new JPanel();
+	    board.setBounds(250, 300, 900, 900);
+	    board.setLayout(new BorderLayout());
 	    
 	    board.setBackground(Color.GRAY);
-	    
+   
 	    JComponent c1 = new CarComponent();
-	    
-	    //frame.add(c1);
-	    
-	    board.add(c1);
-	    
-	    board.setLayout(new BorderLayout());
+
 	    board.add(c1, BorderLayout.CENTER);
 	     
 	    textPanel.add(board);
 	    
 	    frame.add(textPanel);
-	    
-		
-		
 		
 		
 		
