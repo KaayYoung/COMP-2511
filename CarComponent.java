@@ -28,7 +28,7 @@ public class CarComponent extends JComponent {
 	
 	public CarComponent() {
 		
-		
+		// to search the horizontal car
 		for(int row = 0; row < 6; row++) {
 			for(int col = 0; col < 6; col++) {
 			
@@ -48,7 +48,7 @@ public class CarComponent extends JComponent {
 				}		
 			}
 		}
-
+		// to search the vertical car
 		for(int col = 0; col < 6; col++) {
 			for(int row = 0;  row < 6; row++) {
 				
@@ -106,6 +106,7 @@ public class CarComponent extends JComponent {
 				dx = mousePoint.getX() - lastMousePoint.getX();
 				dy = mousePoint.getY() - lastMousePoint.getY();
 				
+				// find the car that is dragged
 				for(int i = 0; i < carList.size(); i++) {
 					CarShape c = carList.get(i);
 					if(c.contains(mousePoint)) {
