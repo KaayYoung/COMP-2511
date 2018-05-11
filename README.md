@@ -4,8 +4,6 @@ about the board.
 things need to do:
 1. add image(contains grid) into the textPanel, run the car on the image
 
-2. when dragging the car, how to ask the car to stop if it hit another car
+2. return the state to the algo
 
-3. return the state to the algo
-
-4. fill the color into the car
+3. fill the color into the car
