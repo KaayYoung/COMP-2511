@@ -1,16 +1,47 @@
 package GridLock;
 
+import sun.audio.AudioData;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
+import sun.audio.ContinuousAudioDataStream;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 
 public class GameFrame extends JFrame{
 
     private JPanel background;
+    static InputStream bgm = GameFrame.class.getClassLoader().getResourceAsStream("background.wav");
+    static AudioStream s;
+    static {
+        try {
+            s = new AudioStream(bgm);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    static AudioData audiodata;
+
+    static {
+        try {
+            audiodata = s.getData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    static ContinuousAudioDataStream loop = new ContinuousAudioDataStream(audiodata);
+    boolean isplaying = true;
 
     public GameFrame(){
+        AudioPlayer.player.start(loop);
         prepareGUI();
     }
 
@@ -39,8 +70,6 @@ public class GameFrame extends JFrame{
         this.setContentPane(background);
 
 
-
-
         // Button for creating new game
         JButton newGameButton = new JButton("New Game");
         newGameButton.setBounds(650,500,200,120);
@@ -54,8 +83,6 @@ public class GameFrame extends JFrame{
                 requestFocus();
             }
         });
-
-
 
 
         // Button for Setting
@@ -179,6 +206,52 @@ public class GameFrame extends JFrame{
         setting_background.setBounds(1500,1500,1500,1500);
         setting_background.setLayout(null);
 
+        // Add sound open/close button
+        if (isplaying == true) {
+            JButton sound_close = new JButton();
+            try {
+                sound_close.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("sound_close.jpg"))));
+            } catch (Exception e) {
+                System.out.println("No such image");
+                System.exit(0);
+            }
+            sound_close.setBounds(550, 700, 310, 200);
+            setting_background.add(sound_close);
+            sound_close.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // should stop bgm then display sound_open button
+                    AudioPlayer.player.stop(loop);
+                    isplaying = false;
+                    settingPage();
+                }
+            });
+        }
+
+        // Add sound_open button when sound is closed
+        else if (isplaying == false) {
+            JButton sound_open = new JButton();
+            try {
+                sound_open.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("sound_open.jpg"))));
+            } catch (Exception e) {
+                System.out.println("No such image");
+                System.exit(0);
+            }
+            sound_open.setBounds(550, 700, 310, 200);
+            setting_background.add(sound_open);
+            sound_open.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // should start bgm then display sound_close button
+                    AudioPlayer.player.start(loop);
+                    isplaying = true;
+                    settingPage();
+                }
+            });
+        }
+
         // Add back button
         JButton back = new JButton();
         try {
@@ -187,7 +260,7 @@ public class GameFrame extends JFrame{
             System.out.println("No such image");
             System.exit(0);
         }
-        back.setBounds(320,550,100,60);
+        back.setBounds(600,1050,200,120);
         setting_background.add(back);
         back.addActionListener(new ActionListener() {
             @Override
