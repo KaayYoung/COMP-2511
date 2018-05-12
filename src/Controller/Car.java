@@ -48,7 +48,7 @@ public class Car{
 	
 	@Override
 	public String toString() {
-		return "Car " + carId + ": " + posRow + ", " + posCol + ", " + length + ", " + direction;
+		return carId + " "  + posRow + " " + posCol + " " + length + " " + direction;
 	}
 	
 	public int getCarId() {

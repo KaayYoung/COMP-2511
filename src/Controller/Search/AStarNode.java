@@ -41,7 +41,7 @@ public class AStarNode implements Comparable<AStarNode>{
     }
     
     public int getGValue() {
-        return hValue;
+        return gValue;
     }
     
     public void setFValue(int fValue) {

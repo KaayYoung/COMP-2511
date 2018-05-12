@@ -7,6 +7,7 @@ import java.util.HashMap;
 import Controller.Car.Direction;
 
 public class Board {
+	public static final int MAX_CAR = 7;
 	public static final int BOARD_SIZE = 6;
 	
 	private HashMap<Integer, Car> cars;
@@ -18,10 +19,48 @@ public class Board {
 	public Board(HashMap<Integer, Car> cars) {
 		this.width = BOARD_SIZE;
 		this.height = BOARD_SIZE;
-		this.cars = cars;
-		this.carCount = cars.size();
+		
+		if (cars != null) {
+			this.cars = cars;
+			this.carCount = cars.size();
+		}
+		else {
+			this.cars = new HashMap<Integer, Car>();
+			this.carCount = 0;
+		}
+		
 		this.gameBoard = new int[width][height];
 		updateGameBoard();
+	}
+	
+	public boolean addCar(Car newCar) {
+		if (cars.size() < Board.MAX_CAR && !cars.containsKey(newCar.getCarId())) {
+			if (newCar.getDirection() == Direction.HORIZONTAL) {
+				for (int i = 0; i < newCar.getLength(); i++) {
+					if (getGameBoard()[newCar.getPosRow()][newCar.getPosCol() + i] != 0) {
+						return false;
+					}
+				}
+				
+				cars.put(newCar.getCarId(), newCar);
+				carCount++;
+				updateGameBoard();
+				return true;
+			}
+			else {
+				for (int i = 0; i < newCar.getLength(); i++) {
+					if (getGameBoard()[newCar.getPosRow() + 1 - newCar.getLength() + i][newCar.getPosCol()] != 0) {
+						return false;
+					}
+				}
+				
+				cars.put(newCar.getCarId(), newCar);
+				carCount++;
+				updateGameBoard();
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void updateGameBoard() {

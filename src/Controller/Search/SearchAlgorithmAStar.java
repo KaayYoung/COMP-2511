@@ -46,7 +46,7 @@ public class SearchAlgorithmAStar implements SearchAlgorithm {
 	    			cameFrom.put(neighbor, current);
 	    			neighbor.setParent(current);
 	    			neighbor.setGValue(tentative_gScore);
-	    			neighbor.setFValue(heuristic.calculateHValue(start) + start.getGValue());
+	    			neighbor.setFValue(heuristic.calculateHValue(neighbor) + neighbor.getGValue());
 	    			
 	    			if (!openList.contains(neighbor)) {
 	    				openList.add(neighbor);
@@ -71,21 +71,5 @@ public class SearchAlgorithmAStar implements SearchAlgorithm {
 		}
 		
 		return path;
-	}
-	
-	// Print steps to solution
-	public void printSolution(List<Board> solution, PrintMode mode) {
-		if (mode == PrintMode.PRINT_CARS) {
-			for (int i = 1; i < solution.size(); i++) {
-				solution.get(i).printCars();
-				System.out.println();
-			}
-		}
-		else if (mode == PrintMode.PRINT_BOARD) {
-			for (int i = 1; i < solution.size(); i++) {
-				solution.get(i).printBoard();
-				System.out.println();
-			}
-		}
 	}
 }

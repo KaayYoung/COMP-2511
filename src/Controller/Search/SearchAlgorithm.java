@@ -12,5 +12,18 @@ public interface SearchAlgorithm {
 	
 	List <Board> getPath(Board board, Heuristic heuristic);
 	
-	public void printSolution(List<Board> shortestSolution, PrintMode mode);
+	public static void printSolution(List<Board> solution, PrintMode mode) {
+		if (mode == PrintMode.PRINT_CARS) {
+			for (int i = 1; i < solution.size(); i++) {
+				solution.get(i).printCars();
+				System.out.println();
+			}
+		}
+		else if (mode == PrintMode.PRINT_BOARD) {
+			for (int i = 1; i < solution.size(); i++) {
+				solution.get(i).printBoard();
+				System.out.println();
+			}
+		}
+	}
 }

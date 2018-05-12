@@ -2,8 +2,8 @@ package Controller.Search;
 
 import Controller.Board;
 
-public class HeuristicCarsInfront implements Heuristic{
-	// Many thanks to Jennifer
+public class HeuristicFreeFromRedCar implements Heuristic{
+
 	public int calculateHValue(AStarNode current) {
 		int h = 0;
 		
@@ -13,7 +13,7 @@ public class HeuristicCarsInfront implements Heuristic{
 		int mainCarLength = current.getBoard().getCar(1).getLength();
 		
 		for (int i = mainCarCol + mainCarLength; i < Board.BOARD_SIZE; i++) {
-			if (current.getBoard().getGameBoard()[mainCarRow][i] != mainCarId && current.getBoard().getGameBoard()[mainCarRow][i] != 0){
+			if (current.getBoard().getGameBoard()[mainCarRow][i] != mainCarId && current.getBoard().getGameBoard()[mainCarRow][i] == 0){
 				h++;
 			}
 		}

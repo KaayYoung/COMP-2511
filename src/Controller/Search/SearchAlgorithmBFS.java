@@ -7,7 +7,7 @@ import java.util.Queue;
 
 import Controller.Board;
 
-public class SearchAlgorithmDFS implements SearchAlgorithm {
+public class SearchAlgorithmBFS implements SearchAlgorithm {
 
 	public List<Board> getPath(Board board, Heuristic heuristic) {
 		Board frontBoard = new Board(board.getCars());
@@ -70,22 +70,5 @@ public class SearchAlgorithmDFS implements SearchAlgorithm {
 			}
 		}
 		return shortestSolution;
-	}
-	
-	// Print steps to solution
-	// Mode: 0 - print cars, 1 - print board
-	public void printSolution(List<Board> solution, PrintMode mode) {
-		if (mode == PrintMode.PRINT_CARS) {
-			for (int i = 1; i < solution.size(); i++) {
-				solution.get(i).printCars();
-				System.out.println();
-			}
-		}
-		else if (mode == PrintMode.PRINT_BOARD) {
-			for (int i = 1; i < solution.size(); i++) {
-				solution.get(i).printBoard();
-				System.out.println();
-			}
-		}
 	}
 }
