@@ -3,6 +3,8 @@ import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 import sun.audio.ContinuousAudioDataStream;
 
+
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,7 +14,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class GameFrame extends JFrame{
+public class GameFrame extends JFrame {
 
     private JPanel background;
     static InputStream bgm = GameFrame.class.getClassLoader().getResourceAsStream("background.wav");
@@ -80,46 +82,29 @@ public class GameFrame extends JFrame{
         background.setBounds(1500,1500,1500,1500);
         this.setContentPane(background);
 
-
         // Button for creating new game
         JButton newGameButton = new JButton("New Game");
         newGameButton.setBounds(650,500,200,120);
         newGameButton.setFont(new Font("Arial", Font.PLAIN, 25));
+        newGameButton.setActionCommand("New Game");
+        newGameButton.addActionListener(new ButtonClickListener());
         background.add(newGameButton);
-        newGameButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // redirect to difficulty selection page
-                difficultySelection();
-                requestFocus();
-            }
-        });
-
 
         // Button for Setting
         JButton settingButton = new JButton("Setting");
         settingButton.setBounds(650,750,200,120);
         settingButton.setFont(new Font("Arial", Font.PLAIN, 25));
+        settingButton.setActionCommand("Setting");
+        settingButton.addActionListener(new ButtonClickListener());
         background.add(settingButton);
-        settingButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // redirect to setting page
-                settingPage();
-                requestFocus();
-            }
-        });
+
         // Button for quit game
         JButton quitButton = new JButton("Quit");
         quitButton.setBounds(650,1050,200,120);
         quitButton.setFont(new Font("Arial", Font.PLAIN, 25));
+        quitButton.setActionCommand("Quit");
+        quitButton.addActionListener(new ButtonClickListener());
         background.add(quitButton);
-        quitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
 
         this.setVisible(true);
     }
@@ -146,40 +131,25 @@ public class GameFrame extends JFrame{
         JButton easy = new JButton("Easy");
         easy.setBounds(650,400,200,120);
         easy.setFont(new Font("Arial", Font.PLAIN, 25));
+        easy.setActionCommand("Easy");
+        easy.addActionListener(new ButtonClickListener());
         difficulty_background.add(easy);
-        easy.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Set up difficulty to easy
-                boardPage();
-            }
-        });
 
         // Create Medium difficulty button
         JButton medium = new JButton("Medium");
         medium.setBounds(650,650,200,120);
         medium.setFont(new Font("Arial", Font.PLAIN, 25));
+        medium.setActionCommand("Medium");
+        medium.addActionListener(new ButtonClickListener());
         difficulty_background.add(medium);
-        medium.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Set up difficulty to Medium
-                boardPage();
-            }
-        });
 
         // Create Expert difficulty button
         JButton expert = new JButton("Expert");
         expert.setBounds(650,900,200,120);
         expert.setFont(new Font("Arial", Font.PLAIN, 25));
+        expert.setActionCommand("Expert");
+        expert.addActionListener(new ButtonClickListener());
         difficulty_background.add(expert);
-        expert.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Set up difficulty to Expert
-                boardPage();
-            }
-        });
 
         // Create Back button
         JButton back = new JButton();
@@ -190,20 +160,13 @@ public class GameFrame extends JFrame{
             System.exit(0);
         }
         back.setBounds(650,1200,200,120);
+        back.setActionCommand("Back");
+        back.addActionListener(new ButtonClickListener());
         difficulty_background.add(back);
-        back.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Back to Menu Page
-                setContentPane(background);
-            }
-        });
 
         this.setContentPane(difficulty_background);
-        //this.setContentPane(new DifficultyFrame(this));
         this.setVisible(true);
     }
-
 
 
     public void settingPage() {
@@ -223,6 +186,8 @@ public class GameFrame extends JFrame{
 
         // Add sound open/close button
         if (isplaying == true) {
+
+
             JButton sound_close = new JButton();
             try {
                 sound_close.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("sound_close.jpg"))));
@@ -276,14 +241,9 @@ public class GameFrame extends JFrame{
             System.exit(0);
         }
         back.setBounds(600,1050,200,120);
+        back.setActionCommand("Back");
+        back.addActionListener(new ButtonClickListener());
         setting_background.add(back);
-        back.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Back to Menu Page
-                setContentPane(background);
-            }
-        });
 
         this.setContentPane(setting_background);
         this.setVisible(true);
@@ -353,6 +313,48 @@ public class GameFrame extends JFrame{
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         this.setContentPane(textPanel);
         this.setVisible(true);
+
+    }
+
+    private class ButtonClickListener implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+            String command = e.getActionCommand();
+            if (command.equals("New Game")) {
+                try {
+                    AudioInputStream click_audio = AudioSystem.getAudioInputStream(GameFrame.class.getClassLoader().getResource("button_click.wav"));
+                    Clip clip = null;
+                    try {
+                        clip = AudioSystem.getClip();
+                    } catch (LineUnavailableException e1) {
+                        e1.printStackTrace();
+                    }
+                    clip.open(click_audio);
+                    clip.start();
+                } catch (UnsupportedAudioFileException e1) {
+                    e1.printStackTrace();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (LineUnavailableException e1) {
+                    e1.printStackTrace();
+                }
+                difficultySelection();
+                requestFocus();
+            } else if (command.equals("Setting")) {
+                settingPage();
+                requestFocus();
+            } else if (command.equals("Quit")) {
+                System.exit(0);
+            } else if (command.equals("Easy")) {
+                boardPage();
+            } else if (command.equals("Medium")) {
+                boardPage();
+            } else if (command.equals("Expert")) {
+                boardPage();
+            } else if (command.equals("Back")) {
+                setContentPane(background);
+            }
+        }
 
     }
 }
