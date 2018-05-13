@@ -13,7 +13,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -21,7 +20,10 @@ import java.util.Objects;
 
 public class GameFrame extends JFrame {
 
+    // Panel for menu background
     private JPanel background;
+
+    // Background music
     static InputStream bgm = GameFrame.class.getClassLoader().getResourceAsStream("View/images/background.wav");
     static AudioStream s;
     static {
@@ -33,7 +35,6 @@ public class GameFrame extends JFrame {
         }
     }
     static AudioData audiodata;
-
     static {
         try {
             audiodata = s.getData();
@@ -42,17 +43,11 @@ public class GameFrame extends JFrame {
         }
     }
     static ContinuousAudioDataStream loop = new ContinuousAudioDataStream(audiodata);
+    // A variable for controlling close/open background music
     private boolean is_playing = true;
 
     private static final int FRAME_WIDTH = 1500;
     private static final int FRAME_HEIGHT = 1500;
-
-    static int matrix[][] = {{1,1,0,0,0,0},
-            {0,0,0,0,5,0},
-            {0,0,6,6,5,0},
-            {4,4,4,0,0,0},
-            {0,0,0,7,7,7},
-            {0,0,0,0,0,0}};
 
     private static ArrayList<JLabel> carList = new ArrayList<JLabel>();
     private static final int Car_width = 150;
@@ -66,10 +61,12 @@ public class GameFrame extends JFrame {
 
     public static void main(String args[]) {
         GameFrame gameFrame = new GameFrame();
+        gameFrame.setVisible(true);
     }
 
     public void prepareGUI() {
-        this.setTitle("Grid Lock");
+
+        this.setTitle("Rush Hour");
         this.setBounds(1500,1500,1500,1500);
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // if don't add this line, the program won't stop when click cross
@@ -111,16 +108,12 @@ public class GameFrame extends JFrame {
         quitButton.setActionCommand("Quit");
         quitButton.addActionListener(new ButtonClickListener());
         background.add(quitButton);
-
-        this.setVisible(true);
     }
-
 
 
     public void difficultySelection() {
 
         this.repaint();
-//        this.remove(background);
 
         JPanel difficulty_background = new JPanel() {
             public void paintComponent(Graphics g) {
@@ -190,10 +183,8 @@ public class GameFrame extends JFrame {
         setting_background.setBounds(1500,1500,1500,1500);
         setting_background.setLayout(null);
 
-        // Add sound open/close button
+        // Add sound close button when sound is open
         if (is_playing == true) {
-
-
             JButton sound_close = new JButton();
             try {
                 sound_close.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("View/images/sound_close.jpg"))));
@@ -202,17 +193,9 @@ public class GameFrame extends JFrame {
                 System.exit(0);
             }
             sound_close.setBounds(550, 700, 310, 200);
+            sound_close.setActionCommand("Sound Close");
+            sound_close.addActionListener(new ButtonClickListener());
             setting_background.add(sound_close);
-            sound_close.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // should stop bgm then display sound_open button
-                    AudioPlayer.player.stop(loop);
-                     is_playing = false;
-                    settingPage();
-                }
-            });
         }
 
         // Add sound_open button when sound is closed
@@ -225,17 +208,9 @@ public class GameFrame extends JFrame {
                 System.exit(0);
             }
             sound_open.setBounds(550, 700, 310, 200);
+            sound_open.setActionCommand("Sound Open");
+            sound_open.addActionListener(new ButtonClickListener());
             setting_background.add(sound_open);
-            sound_open.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // should start bgm then display sound_close button
-                    AudioPlayer.player.start(loop);
-                     is_playing = true;
-                    settingPage();
-                }
-            });
         }
 
         // Add back button
@@ -296,8 +271,9 @@ public class GameFrame extends JFrame {
         board.setLayout(null);
 
         board.setBackground(Color.GRAY);
-        //String puzzle_path = String.valueOf(GameFrame.class.getClassLoader().getParent().getParent().getResource("/FinalVersion/puzzles/easy1.txt"));
-        // Attention: need to change path!!!!
+
+         //String puzzle_path = String.valueOf(GameFrame.class.getClassLoader().getParent().getParent().getResource("/FinalVersion/puzzles/easy1.txt"));
+        // Attention: need to change path if use cse machine
         Board newBoard = BoardGenerator.loadBoardFromFile("C:/Users/KayLa/IdeaProjects/FinalVersion/puzzles/easy1.txt");
 
         CarCreate car = new CarCreate(newBoard);
@@ -322,7 +298,6 @@ public class GameFrame extends JFrame {
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         this.setContentPane(textPanel);
         this.setVisible(true);
-
     }
 
     private class ButtonClickListener implements ActionListener {
@@ -348,10 +323,8 @@ public class GameFrame extends JFrame {
                     e1.printStackTrace();
                 }
                 difficultySelection();
-                requestFocus();
             } else if (command.equals("Setting")) {
                 settingPage();
-                requestFocus();
             } else if (command.equals("Quit")) {
                 System.exit(0);
             } else if (command.equals("Easy")) {
@@ -362,6 +335,14 @@ public class GameFrame extends JFrame {
                 boardPage();
             } else if (command.equals("Back")) {
                 setContentPane(background);
+            } else if (command.equals("Sound Close")) {
+                AudioPlayer.player.stop(loop);
+                is_playing = false;
+                settingPage();
+            } else if (command.equals("Sound Open")) {
+                AudioPlayer.player.start(loop);
+                is_playing = true;
+                settingPage();
             }
         }
 
