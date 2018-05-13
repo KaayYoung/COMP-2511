@@ -63,6 +63,11 @@ public class Board {
 		return false;
 	}
 	
+	public void changeCarPos(int carId, int newRow, int newCol) {
+		cars.get(carId).changePos(newRow, newCol);
+		updateGameBoard();
+	}
+	
 	public void updateGameBoard() {
 		// Empty the board
 		// fill board with 0's

@@ -1,8 +1,10 @@
 package Model;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 import Controller.Board;
@@ -101,5 +103,45 @@ public class BoardGenerator {
 		
 		PrintStream stdout = System.out;
 		System.setOut(stdout);   
+	}
+	
+	public static Board loadBoardFromFile(String filename) {
+		Board board = new Board(null);
+		
+		try {
+
+            Scanner input = new Scanner(System.in);
+
+            File file = new File(filename);
+
+            input = new Scanner(file);
+            String line = input.nextLine();
+            if (line.contains("#BOARD")) {
+            	while (input.hasNextLine()) {
+            		line = input.next();
+            		if (line.contains("#SOLUTION")) {
+            			break;
+            		}
+            		
+	                int carId = Integer.parseInt(line);
+	                int carRow = input.nextInt();
+	                int carCol = input.nextInt();
+	                int carLength = input.nextInt();
+	                Direction carDirection = Direction.VERTICAL;
+	                if (input.next().equals("HORIZONTAL")) {
+	                	carDirection = Direction.HORIZONTAL;
+	                }
+	                Car newCar = new Car(carId, carRow, carCol, carLength, carDirection);
+	                board.addCar(newCar);	             
+	            }
+	            
+	            input.close();
+			}
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+		
+		return board;
 	}
 }

@@ -46,6 +46,11 @@ public class Car{
 	    }
 	}
 	
+	public void changePos(int row, int col) {
+		this.posRow = row;
+		this.posCol = col;
+	}
+	
 	@Override
 	public String toString() {
 		return carId + " "  + posRow + " " + posCol + " " + length + " " + direction;

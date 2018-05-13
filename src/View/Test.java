@@ -154,22 +154,25 @@ public class Test {
 //			nSolutions++;
 //		}
 		
-		int nSolutions = 52;
+//		int nSolutions = 52;
+//		
+//		for (int i = 8; i <= 10; i++) {
+//			SearchAlgorithm searchAStar = new SearchAlgorithmAStar();
+//			Heuristic JC = new HeuristicCarsInfront();
+//			Board randomBoard = BoardGenerator.generate(ThreadLocalRandom.current().nextInt(5, 9));
+//			List<Board> randomBoardSolutions = searchAStar.getPath(randomBoard, JC);
+//			while (randomBoardSolutions == null || randomBoardSolutions.size() <= nSolutions) {
+//				randomBoard = BoardGenerator.generate(ThreadLocalRandom.current().nextInt(5, 9));
+//				randomBoardSolutions = searchAStar.getPath(randomBoard, JC);
+//				
+//				System.out.println(randomBoardSolutions.size());
+//			}
+//			BoardGenerator.printBoardToFile("puzzles/expert"+i, randomBoard, randomBoardSolutions);
+//			nSolutions++;
+//		}
 		
-		for (int i = 8; i <= 10; i++) {
-			SearchAlgorithm searchAStar = new SearchAlgorithmAStar();
-			Heuristic JC = new HeuristicCarsInfront();
-			Board randomBoard = BoardGenerator.generate(ThreadLocalRandom.current().nextInt(5, 9));
-			List<Board> randomBoardSolutions = searchAStar.getPath(randomBoard, JC);
-			while (randomBoardSolutions == null || randomBoardSolutions.size() <= nSolutions) {
-				randomBoard = BoardGenerator.generate(ThreadLocalRandom.current().nextInt(5, 9));
-				randomBoardSolutions = searchAStar.getPath(randomBoard, JC);
-				
-				System.out.println(randomBoardSolutions.size());
-			}
-			BoardGenerator.printBoardToFile("puzzles/expert"+i, randomBoard, randomBoardSolutions);
-			nSolutions++;
-		}
+		Board newBoard = BoardGenerator.loadBoardFromFile("../puzzles/easy1.txt");
+		newBoard.printBoard();
 	}
 
 }
