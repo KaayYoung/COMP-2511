@@ -41,6 +41,7 @@ public class GameFrame extends JFrame {
             e.printStackTrace();
         }
     }
+    // continue playing music
     static ContinuousAudioDataStream loop = new ContinuousAudioDataStream(audiodata);
     // A variable for controlling close/open background music
     private boolean is_playing = true;
@@ -319,56 +320,70 @@ public class GameFrame extends JFrame {
     }
 
 
+    public void ButtonSound() {
+        try {
+            AudioInputStream click_audio = AudioSystem.getAudioInputStream(GameFrame.class.getClassLoader().getResource("View/images/button_click.wav"));
+            Clip clip = null;
+            try {
+                clip = AudioSystem.getClip();
+            } catch (LineUnavailableException e1) {
+                e1.printStackTrace();
+            }
+            clip.open(click_audio);
+            clip.start();
+        } catch (UnsupportedAudioFileException e1) {
+            e1.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } catch (LineUnavailableException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+
     private class ButtonClickListener implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
             if (command.equals("New Game")) {
-                try {
-                    AudioInputStream click_audio = AudioSystem.getAudioInputStream(GameFrame.class.getClassLoader().getResource("View/images/button_click.wav"));
-                    Clip clip = null;
-                    try {
-                        clip = AudioSystem.getClip();
-                    } catch (LineUnavailableException e1) {
-                        e1.printStackTrace();
-                    }
-                    clip.open(click_audio);
-                    clip.start();
-                } catch (UnsupportedAudioFileException e1) {
-                    e1.printStackTrace();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                } catch (LineUnavailableException e1) {
-                    e1.printStackTrace();
-                }
+                ButtonSound();
                 difficultySelection();
             } else if (command.equals("Setting")) {
+                ButtonSound();
                 settingPage();
             } else if (command.equals("Quit")) {
                 System.exit(0);
             } else if (command.equals("Easy")) {
+                ButtonSound();
                 boardPage();
             } else if (command.equals("Medium")) {
+                ButtonSound();
                 boardPage();
             } else if (command.equals("Expert")) {
+                ButtonSound();
                 boardPage();
             } else if (command.equals("Back")) {
+                ButtonSound();
                 setContentPane(background);
             } else if (command.equals("Sound Close")) {
+                ButtonSound();
                 AudioPlayer.player.stop(loop);
                 is_playing = false;
                 settingPage();
             } else if (command.equals("Sound Open")) {
+                ButtonSound();
                 AudioPlayer.player.start(loop);
                 is_playing = true;
                 settingPage();
             } else if (command.equals("Back To Menu")) {
+                ButtonSound();
                 setContentPane(background);
             } else if (command.equals("Hint")) {
+                ButtonSound();
                 // TODO: give hints
 
             }
         }
-
     }
+    
 }
