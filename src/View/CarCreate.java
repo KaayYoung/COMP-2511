@@ -1,3 +1,5 @@
+package View;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import javax.swing.JLabel;
 import Controller.Board;
 import Controller.Car;
 import Controller.Car.Direction;
+import View.MoveComponent;
 
 
 public class CarCreate {

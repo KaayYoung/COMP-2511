@@ -1,3 +1,7 @@
+package View;
+
+import Controller.Board;
+import Model.BoardGenerator;
 import sun.audio.AudioData;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
@@ -9,6 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -17,12 +22,13 @@ import java.util.Objects;
 public class GameFrame extends JFrame {
 
     private JPanel background;
-    static InputStream bgm = GameFrame.class.getClassLoader().getResourceAsStream("background.wav");
+    static InputStream bgm = GameFrame.class.getClassLoader().getResourceAsStream("View/images/background.wav");
     static AudioStream s;
     static {
         try {
             s = new AudioStream(bgm);
         } catch (IOException e) {
+
             e.printStackTrace();
         }
     }
@@ -36,7 +42,7 @@ public class GameFrame extends JFrame {
         }
     }
     static ContinuousAudioDataStream loop = new ContinuousAudioDataStream(audiodata);
-    boolean isplaying = true;
+    private boolean is_playing = true;
 
     private static final int FRAME_WIDTH = 1500;
     private static final int FRAME_HEIGHT = 1500;
@@ -72,7 +78,7 @@ public class GameFrame extends JFrame {
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
 
-                ImageIcon img=new ImageIcon(GameFrame.class.getClassLoader().getResource("menu_background.png"));
+                ImageIcon img=new ImageIcon(GameFrame.class.getClassLoader().getResource("View/images/menu_background.png"));
                 //Image a = img.getImage().getScaledInstance(1500,1500, Image.SCALE_DEFAULT);
                 g.drawImage(img.getImage(), 0, 0, 1500,1500, this);
             }
@@ -119,7 +125,7 @@ public class GameFrame extends JFrame {
         JPanel difficulty_background = new JPanel() {
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("difficulty_background.jpg")));
+                ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("View/images/difficulty_background.jpg")));
                 g.drawImage(img.getImage(), 0, 0,1500,1500, this);
             }
         };
@@ -154,7 +160,7 @@ public class GameFrame extends JFrame {
         // Create Back button
         JButton back = new JButton();
         try {
-            back.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("back.png"))));
+            back.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("View/images/back.png"))));
         } catch (Exception e) {
             System.out.println("No such image");
             System.exit(0);
@@ -176,7 +182,7 @@ public class GameFrame extends JFrame {
         JPanel setting_background = new JPanel() {
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("setting_background.png")));
+                ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("View/images/setting_background.png")));
                 g.drawImage(img.getImage(), 0, 0, 1500,1500, this);
             }
         };
@@ -185,12 +191,12 @@ public class GameFrame extends JFrame {
         setting_background.setLayout(null);
 
         // Add sound open/close button
-        if (isplaying == true) {
+        if (is_playing == true) {
 
 
             JButton sound_close = new JButton();
             try {
-                sound_close.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("sound_close.jpg"))));
+                sound_close.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("View/images/sound_close.jpg"))));
             } catch (Exception e) {
                 System.out.println("No such image");
                 System.exit(0);
@@ -203,17 +209,17 @@ public class GameFrame extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     // should stop bgm then display sound_open button
                     AudioPlayer.player.stop(loop);
-                    isplaying = false;
+                     is_playing = false;
                     settingPage();
                 }
             });
         }
 
         // Add sound_open button when sound is closed
-        else if (isplaying == false) {
+        else if (is_playing == false) {
             JButton sound_open = new JButton();
             try {
-                sound_open.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("sound_open.jpg"))));
+                sound_open.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("View/images/sound_open.jpg"))));
             } catch (Exception e) {
                 System.out.println("No such image");
                 System.exit(0);
@@ -226,7 +232,7 @@ public class GameFrame extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     // should start bgm then display sound_close button
                     AudioPlayer.player.start(loop);
-                    isplaying = true;
+                     is_playing = true;
                     settingPage();
                 }
             });
@@ -235,7 +241,7 @@ public class GameFrame extends JFrame {
         // Add back button
         JButton back = new JButton();
         try {
-            back.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("back.png"))));
+            back.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("View/images/back.png"))));
         } catch (Exception e) {
             System.out.println("No such image");
             System.exit(0);
@@ -257,7 +263,7 @@ public class GameFrame extends JFrame {
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
 
-                ImageIcon img=new ImageIcon("C:/Users/KayLa/Downloads/COMP2511/project/Gridlock/board_background.jpg");
+                ImageIcon img=new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("View/images/board_background.jpg")));
                 g.drawImage(img.getImage(), 0, 0, 1500, 1500, this);
 
             }
@@ -282,7 +288,7 @@ public class GameFrame extends JFrame {
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
 
-                ImageIcon img=new ImageIcon("C:/Users/KayLa/Downloads/COMP2511/project/Gridlock/board.jpg");
+                ImageIcon img=new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource("View/images/board.jpg")));
                 g.drawImage(img.getImage(), 0, 0, 900, 900, this);
             }
         };
@@ -290,8 +296,9 @@ public class GameFrame extends JFrame {
         board.setLayout(null);
 
         board.setBackground(Color.GRAY);
-
-        Board newBoard = BoardGenerator.loadBoardFromFile("../puzzles/easy1.txt");
+        //String puzzle_path = String.valueOf(GameFrame.class.getClassLoader().getParent().getParent().getResource("/FinalVersion/puzzles/easy1.txt"));
+        // Attention: need to change path!!!!
+        Board newBoard = BoardGenerator.loadBoardFromFile("C:/Users/KayLa/IdeaProjects/FinalVersion/puzzles/easy1.txt");
 
         CarCreate car = new CarCreate(newBoard);
         car.createCarList();
@@ -324,7 +331,7 @@ public class GameFrame extends JFrame {
             String command = e.getActionCommand();
             if (command.equals("New Game")) {
                 try {
-                    AudioInputStream click_audio = AudioSystem.getAudioInputStream(GameFrame.class.getClassLoader().getResource("button_click.wav"));
+                    AudioInputStream click_audio = AudioSystem.getAudioInputStream(GameFrame.class.getClassLoader().getResource("View/images/button_click.wav"));
                     Clip clip = null;
                     try {
                         clip = AudioSystem.getClip();

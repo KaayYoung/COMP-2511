@@ -1,3 +1,5 @@
+package View;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -7,7 +9,6 @@ import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
 import Controller.Board;
-
 
 /*Code from internet, needs to be modify*/
 public class MoveComponent extends MouseAdapter
