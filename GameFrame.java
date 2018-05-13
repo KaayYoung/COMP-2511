@@ -291,7 +291,9 @@ public class GameFrame extends JFrame {
 
         board.setBackground(Color.GRAY);
 
-        CarCreate car = new CarCreate(matrix);
+        Board newBoard = BoardGenerator.loadBoardFromFile("../puzzles/easy1.txt");
+
+        CarCreate car = new CarCreate(newBoard);
         car.createCarList();
         carList = car.getCarList();
         moveList = car.getMoveList();

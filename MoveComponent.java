@@ -6,6 +6,8 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
+import Controller.Board;
+
 
 /*Code from internet, needs to be modify*/
 public class MoveComponent extends MouseAdapter
@@ -32,6 +34,9 @@ public class MoveComponent extends MouseAdapter
 
     private ArrayList<JLabel> carList;
     private JLabel label;
+    private int carId;
+    private Board board;
+    private static final int Car_width = 150;
 
 
     public MoveComponent()
@@ -199,6 +204,8 @@ public class MoveComponent extends MouseAdapter
 
         //************************************************************************************
 
+
+
         destination.setLocation(locationX, locationY);
 
 
@@ -231,6 +238,19 @@ public class MoveComponent extends MouseAdapter
     @Override
     public void mouseReleased(MouseEvent e)
     {
+        int changeCol = 0;
+        int changeRow = 0;
+        if(direction == 1) {
+            changeCol = (int)label.getBounds().getX()/Car_width;
+            changeRow = ((int)label.getBounds().getY()+(int)label.getBounds().getHeight())/Car_width;
+            board.changeCarPos(carId, changeRow-1, changeCol);
+        }else if(direction == 0) {
+            changeCol = (int)label.getBounds().getX()/Car_width;
+            changeRow = (int)label.getBounds().getY()/Car_width;
+            board.changeCarPos(carId, (int)label.getBounds().getY()/Car_width, (int)label.getBounds().getX()/Car_width);
+        }
+
+
         if (!potentialDrag) return;
 
         source.removeMouseMotionListener( this );
@@ -250,13 +270,18 @@ public class MoveComponent extends MouseAdapter
         {
             if (destination instanceof JComponent)
             {
+
                 ((JComponent)destination).revalidate();
             }
             else
             {
+
+
                 destination.validate();
             }
+
         }
+
     }
     // 0 -> horizontal
     // 1-> vertical
@@ -278,5 +303,12 @@ public class MoveComponent extends MouseAdapter
         this.carList = carList;
     }
 
+    public void setCarId(int key) {
+        carId = key;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
 
 }
