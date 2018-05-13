@@ -30,7 +30,6 @@ public class GameFrame extends JFrame {
         try {
             s = new AudioStream(bgm);
         } catch (IOException e) {
-
             e.printStackTrace();
         }
     }
@@ -224,6 +223,7 @@ public class GameFrame extends JFrame {
         back.setBounds(600,1050,200,120);
         back.setActionCommand("Back");
         back.addActionListener(new ButtonClickListener());
+
         setting_background.add(back);
 
         this.setContentPane(setting_background);
@@ -291,6 +291,24 @@ public class GameFrame extends JFrame {
             c.setCarList(carList);
         }
 
+        // Button for redirecting to Menu Page
+        JButton BackMenu = new JButton();
+        BackMenu.setText("Menu");
+        BackMenu.setBounds(340,1240,200,120);
+        BackMenu.setFont(new Font("Arial", Font.PLAIN, 25));
+        BackMenu.setActionCommand("Back To Menu");
+        BackMenu.addActionListener(new ButtonClickListener());
+        textPanel.add(BackMenu);
+
+        // Button for Hint
+        JButton Hint = new JButton();
+        Hint.setText("Hint");
+        Hint.setBounds(870,1240,200,120);
+        Hint.setFont(new Font("Arial", Font.PLAIN, 25));
+        Hint.setActionCommand("Hint");
+        Hint.addActionListener(new ButtonClickListener());
+        textPanel.add(Hint);
+
         textPanel.add(board);
 
         this.add(textPanel);
@@ -299,6 +317,7 @@ public class GameFrame extends JFrame {
         this.setContentPane(textPanel);
         this.setVisible(true);
     }
+
 
     private class ButtonClickListener implements ActionListener {
 
@@ -343,6 +362,11 @@ public class GameFrame extends JFrame {
                 AudioPlayer.player.start(loop);
                 is_playing = true;
                 settingPage();
+            } else if (command.equals("Back To Menu")) {
+                setContentPane(background);
+            } else if (command.equals("Hint")) {
+                // TODO: give hints
+
             }
         }
 
