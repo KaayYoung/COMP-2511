@@ -1,6 +1,3 @@
 # COMP-2511
 
-When run on cse machine or other laptops, need to change the board path in board page
-In file GameFrame.java, line 278 Board newBoard = BoardGenerator.loadBoardFromFile("C:/Users/KayLa/IdeaProjects/FinalVersion/puzzles/easy1.txt");
-  
-
+When run cse machine, need to change the board path in board page

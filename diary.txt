@@ -1,4 +1,4 @@
-17/04/2018 - Group Meeting
+﻿17/04/2018 - Group Meeting
 
 1. who are the intended users: are they novice, intermediate or expert, or all sorts of users (do we even understand what this means?)
 All sorts of users (since we can set difficulty to make the game more challenging)
@@ -49,4 +49,14 @@ todo: add better search algos
 12/05/2018
 Completed A* Search
 TODO: Add more heuristics
-TODO: Refractor code
+TODO: Refactor code
+
+13/05/2018
+Changing List to HashSet for AStar, improving performance significantly
+Making BoardGenerator works
+
+14/05/2018
+Added Settings for global variables
+Fixed some issues with hashSet collisions
+Made BoardGenerator and Solver into 2 main files
+Rework basic interface
