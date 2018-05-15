@@ -18,12 +18,11 @@ public class CarCreate {
     private ArrayList<JLabel> carList = new ArrayList<JLabel>();
     private ArrayList<MoveComponent> moveList = new ArrayList<MoveComponent>();
     private Map<Integer, Car> listCar;
+    private Color[] carColours = {null, Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.ORANGE, Color.PINK, Color.WHITE, Color.CYAN, Color.DARK_GRAY, Color.MAGENTA, Color.GRAY};
     private Board newBoard;
 
     public CarCreate(Board newBoard) {
-
         this.newBoard = newBoard;
-
     }
 
     public ArrayList<JLabel> getCarList() {
@@ -43,19 +42,11 @@ public class CarCreate {
             if (currentCar.getDirection() == Direction.HORIZONTAL) {
 
                 a.setBounds(currentCar.getPosCol() * Settings.UI_BLOCK_SIZE, currentCar.getPosRow() * Settings.UI_BLOCK_SIZE, Settings.UI_BLOCK_SIZE * currentCar.getLength(), Settings.UI_BLOCK_SIZE);
-                if (key == 1) {
-                    a.setBackground(Color.RED);
-                } else {
-                    a.setBackground(new Color((float) Math.random(), (float) Math.random(), (float) Math.random()));
-                    if (a.getBackground().equals(Color.RED)) {
-                        a.setBackground(new Color((float) Math.random(), (float) Math.random(), (float) Math.random()));
-                    }
-                }
-
+                a.setBackground(carColours[key]);
                 a.setOpaque(true);
                 carList.add(a);
 
-                MoveComponent mc = new MoveComponent();
+                MoveComponent mc = new MoveComponent(currentCar);
                 mc.registerComponent(a);
                 mc.setDirection(0);
                 mc.setSnapSize(new Dimension(Settings.UI_BLOCK_SIZE, Settings.UI_BLOCK_SIZE));
@@ -66,14 +57,11 @@ public class CarCreate {
             } else {
 
                 a.setBounds(currentCar.getPosCol() * Settings.UI_BLOCK_SIZE, (currentCar.getPosRow() - currentCar.getLength() + 1) * Settings.UI_BLOCK_SIZE, Settings.UI_BLOCK_SIZE, Settings.UI_BLOCK_SIZE * currentCar.getLength());
-                a.setBackground(new Color((float) Math.random(), (float) Math.random(), (float) Math.random()));
-                if (a.getBackground().equals(Color.RED)) {
-                    a.setBackground(new Color((float) Math.random(), (float) Math.random(), (float) Math.random()));
-                }
+                a.setBackground(carColours[key]);
                 a.setOpaque(true);
                 carList.add(a);
 
-                MoveComponent mc = new MoveComponent();
+                MoveComponent mc = new MoveComponent(currentCar);
                 mc.registerComponent(a);
                 mc.setDirection(1);
                 mc.setSnapSize(new Dimension(Settings.UI_BLOCK_SIZE, Settings.UI_BLOCK_SIZE));

@@ -64,4 +64,6 @@ Rework basic interface
 15/05/2018
 Changed jdk-10 to jre-1.8.0
 Added Game Over screen
+Added Settings page
+Fixed Car collision bugs
 TODO: Level select & save highscore

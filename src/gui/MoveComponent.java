@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
 import gridlock.Board;
+import gridlock.Car;
 import settings.Settings;
 
 /*Code from internet, needs to be modify*/
@@ -38,9 +39,11 @@ public class MoveComponent extends MouseAdapter
     private JLabel label;
     private int carId;
     private Board board;
+    private Car car;
 
-    public MoveComponent()
+    public MoveComponent(Car car)
     {
+    	this.car = car;
     }
 
     public MoveComponent(Class<?> destinationClass, Component... components)
@@ -168,37 +171,88 @@ public class MoveComponent extends MouseAdapter
         for(int i = 0; i < carList.size(); i++) {
             JLabel wall = carList.get(i);
             if(wall != label) {
-                // vertical
-                if(locationX >= wall.getBounds().getX() && locationX < wall.getBounds().getX() +  wall.getBounds().getWidth()){
-                    // hit up
-                    if(location.y >= wall.getBounds().getY() + wall.getBounds().getHeight()) {
-                        while(locationY <= wall.getBounds().getY()) {
-                            locationY += snapSize.height;
-                        }
+                
+            	if(direction == 1) {
+            		// vertical
+            		if(locationX >= wall.getBounds().getX() && locationX < wall.getBounds().getX() +  wall.getBounds().getWidth()){
+                        // hit horizontal
+                    	if(label.getBounds().getWidth() != wall.getBounds().getWidth()) {
+                    		// hit up
+                    		if(location.y >= wall.getBounds().getY() + wall.getBounds().getHeight()) {
+                                while(locationY <= wall.getBounds().getY()) {
+                                    locationY += snapSize.height;
+                                }
+                            }
+                            //hit down
+                            if(location.y + label.getBounds().getHeight() <= wall.getBounds().getY()) {
+                                while(locationY+label.getBounds().getHeight() >= wall.getBounds().getY() + wall.getBounds().getHeight()) {
+                                    locationY -= snapSize.height;
+                                }
+                            }
+                    	}
+                    	
+                    	if(label.getBounds().getWidth() == wall.getBounds().getWidth() && location.x == wall.getBounds().getX()) {
+                    		// hit up
+                    		if(location.y >= wall.getBounds().getY() + wall.getBounds().getHeight()) {
+                                while(locationY < wall.getBounds().getY() + Settings.UI_BLOCK_SIZE * car.getLength()) {
+                                    locationY += snapSize.height;
+                                }
+                            }
+                            //hit down
+                            if(location.y + label.getBounds().getHeight() <= wall.getBounds().getY()) {
+                                while(locationY+label.getBounds().getHeight() > wall.getBounds().getY() + wall.getBounds().getHeight() - Settings.UI_BLOCK_SIZE * car.getLength()) {
+                                    locationY -= snapSize.height;
+                                }
+                            }
+                    	}
+        
                     }
-                    //hit down
-                    if(location.y + label.getBounds().getHeight() <= wall.getBounds().getY()) {
-                        while(locationY+label.getBounds().getHeight() >= wall.getBounds().getY() + wall.getBounds().getHeight()) {
-                            locationY -= snapSize.height;
-                        }
-                    }
-                }
+            	}else {
+            		// horizontal
+            		if(locationY >= wall.getBounds().getY() && locationY < wall.getBounds().getY() + wall.getBounds().getHeight()) {
+                        // hit vertical
+                    	if(label.getBounds().getHeight() != wall.getBounds().getHeight()) {
+                    		//hit left
+                    		if(location.x >= wall.getBounds().getX() + wall.getBounds().getWidth()) {
+                                while(locationX <= wall.getBounds().getX()) {
+                                    locationX += snapSize.width;
+                                }
+                            }
+                            //hit right
+                            if(location.x + label.getBounds().getWidth() <= wall.getBounds().getX()) {
+                                while(locationX+label.getBounds().getWidth() >= wall.getBounds().getX() + wall.getBounds().getWidth()) {
+                                    locationX -= snapSize.width;
+                                }
+                            }
+                    	}
+                    	// hit horizontal 
+                    	if(label.getBounds().getHeight() == wall.getBounds().getHeight() && location.y == wall.getBounds().getY()) {
+                    		// hit left
+                    		if(location.x >= wall.getBounds().getX() + wall.getBounds().getWidth()) {//****************************************8
+                                while(locationX < wall.getBounds().getX() + Settings.UI_BLOCK_SIZE * car.getLength()) {
+                                    locationX += snapSize.width;
+                                }
+                            }
+                    		// hit right
+                    		if(location.x + label.getBounds().getWidth() <= wall.getBounds().getX()) {//*******************************************
+                                while(locationX+label.getBounds().getWidth() > wall.getBounds().getX() + wall.getBounds().getWidth() - Settings.UI_BLOCK_SIZE * car.getLength()) {
+                                    locationX -= snapSize.width;
+                                }
+                            }
 
-                // horizontal
-                if(locationY >= wall.getBounds().getY() && locationY < wall.getBounds().getY() + wall.getBounds().getHeight()) {
-                    //hit left
-                    if(location.x >= wall.getBounds().getX() + wall.getBounds().getWidth()) {
-                        while(locationX <= wall.getBounds().getX()) {
-                            locationX += snapSize.width;
-                        }
+                    	}
+                        
                     }
-                    //hit right
-                    if(location.x + label.getBounds().getWidth() <= wall.getBounds().getX()) {
-                        while(locationX+label.getBounds().getWidth() >= wall.getBounds().getX() + wall.getBounds().getWidth()) {
-                            locationX -= snapSize.width;
-                        }
-                    }
-                }
+            	}
+                
+
+                
+                
+                
+
+                
+                
+                
             }
         }
 
