@@ -60,3 +60,8 @@ Added Settings for global variables
 Fixed some issues with hashSet collisions
 Made BoardGenerator and Solver into 2 main files
 Rework basic interface
+
+15/05/2018
+Changed jdk-10 to jre-1.8.0
+Added Game Over screen
+TODO: Level select & save highscore

@@ -259,6 +259,10 @@ public class MoveComponent extends MouseAdapter
             board.changeCarPos(carId, (int)label.getBounds().getY()/Settings.UI_BLOCK_SIZE, (int)label.getBounds().getX()/Settings.UI_BLOCK_SIZE);
             frame.updateMoves(Math.abs(changeCol - colBefore));
         }
+        
+        if (board.isSolved()) {
+        	frame.gameOver();
+        }
 
 
         if (!potentialDrag) return;
