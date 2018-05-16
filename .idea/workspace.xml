@@ -2,25 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3a100085-f8ba-45a4-81b1-204da7bc46f4" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gridlock/BoardIO.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gridlock/BoardIO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gui/GameFrame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gui/GameFrame$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gui/GameFrame$10.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gui/GameFrame$10.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gui/GameFrame$11.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gui/GameFrame$11.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gui/GameFrame$12.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gui/GameFrame$12.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gui/GameFrame$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gui/GameFrame$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gui/GameFrame$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gui/GameFrame$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gui/GameFrame$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gui/GameFrame$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gui/GameFrame$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gui/GameFrame$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gui/GameFrame$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gui/GameFrame$6.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gui/GameFrame$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gui/GameFrame$7.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gui/GameFrame$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gui/GameFrame$8.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gui/GameFrame$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gui/GameFrame$9.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/gui/GameFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/gui/GameFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/settings/Settings.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/settings/Settings.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gridlock/BoardIO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gridlock/BoardIO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gui/GameFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/GameFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/settings/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/settings/Settings.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -35,8 +17,8 @@
       <file leaf-file-name="GameFrame.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/gui/GameFrame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="949">
-              <caret line="640" column="31" selection-start-line="640" selection-start-column="31" selection-end-line="640" selection-end-column="31" />
+            <state relative-caret-position="165">
+              <caret line="731" column="30" selection-start-line="731" selection-start-column="30" selection-end-line="731" selection-end-column="30" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1257#1551#0" expanded="true" />
@@ -47,8 +29,6 @@
                 <element signature="e#1896#1897#0" expanded="true" />
                 <element signature="e#4715#4862#0" expanded="true" />
                 <element signature="e#4861#4862#0" expanded="true" />
-                <element signature="e#5945#5946#0" expanded="true" />
-                <element signature="e#5988#5989#0" expanded="true" />
                 <element signature="e#22406#22704#0" expanded="true" />
                 <element signature="e#22703#22704#0" expanded="true" />
               </folding>
@@ -228,12 +208,12 @@
       <option name="presentableId" value="Default" />
       <updated>1526467278854</updated>
       <workItem from="1526467280651" duration="679000" />
-      <workItem from="1526510493352" duration="1966000" />
+      <workItem from="1526510493352" duration="2482000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2645000" />
+    <option name="totallyTimeSpent" value="3161000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1513" height="973" extended-state="6" />
@@ -290,8 +270,6 @@
             <element signature="e#1896#1897#0" expanded="true" />
             <element signature="e#4715#4862#0" expanded="true" />
             <element signature="e#4861#4862#0" expanded="true" />
-            <element signature="e#5945#5946#0" expanded="true" />
-            <element signature="e#5988#5989#0" expanded="true" />
             <element signature="e#22406#22704#0" expanded="true" />
             <element signature="e#22703#22704#0" expanded="true" />
           </folding>
@@ -328,8 +306,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/gui/GameFrame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="949">
-          <caret line="640" column="31" selection-start-line="640" selection-start-column="31" selection-end-line="640" selection-end-column="31" />
+        <state relative-caret-position="165">
+          <caret line="731" column="30" selection-start-line="731" selection-start-column="30" selection-end-line="731" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1257#1551#0" expanded="true" />
@@ -340,8 +318,6 @@
             <element signature="e#1896#1897#0" expanded="true" />
             <element signature="e#4715#4862#0" expanded="true" />
             <element signature="e#4861#4862#0" expanded="true" />
-            <element signature="e#5945#5946#0" expanded="true" />
-            <element signature="e#5988#5989#0" expanded="true" />
             <element signature="e#22406#22704#0" expanded="true" />
             <element signature="e#22703#22704#0" expanded="true" />
           </folding>

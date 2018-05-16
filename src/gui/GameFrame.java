@@ -1,6 +1,7 @@
 package gui;
 import java.awt.*;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -155,7 +156,7 @@ public class GameFrame extends JFrame {
 		btnNewGame.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//ButtonSound();
+				ButtonSound();
 				cl.show(contentPane, "difficulty");
 			}
 		});
@@ -170,7 +171,7 @@ public class GameFrame extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if (hasContinue) {
-					//ButtonSound();
+					ButtonSound();
 					cl.show(contentPane, "game");
 				}
 			}
@@ -189,6 +190,7 @@ public class GameFrame extends JFrame {
 		JButton btnSettings = new JButton("Settings");
 		btnSettings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ButtonSound();
 				cl.show(contentPane, "settings");
 			}
 		});
@@ -244,7 +246,7 @@ public class GameFrame extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				SelectLevelButtons.removeAll();
-				// ButtonSound();
+				ButtonSound();
 				cl.show(contentPane, "difficulty");
 			}
 		});
@@ -262,6 +264,7 @@ public class GameFrame extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				SelectLevelButtons.removeAll();
+				ButtonSound();
 				cl.show(contentPane, "mainmenu");
 			}
 		});
@@ -312,6 +315,7 @@ public class GameFrame extends JFrame {
 		btnEasy.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				ButtonSound();
 				levelSelect(Difficulty.EASY);
 				cl.show(contentPane, "levelselect");
 			}
@@ -329,6 +333,7 @@ public class GameFrame extends JFrame {
 		btnMedium.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				ButtonSound();
 				levelSelect(Difficulty.MEDIUM);
 				cl.show(contentPane, "levelselect");
 			}
@@ -346,6 +351,7 @@ public class GameFrame extends JFrame {
 		btnHard.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				ButtonSound();
 				levelSelect(Difficulty.HARD);
 				cl.show(contentPane, "levelselect");
 			}
@@ -607,6 +613,7 @@ public class GameFrame extends JFrame {
 		btnGameOverBackToMain.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				ButtonSound();
 				resetGame();
 				if (hasContinue) {
 					btnContinue.setEnabled(false);
@@ -634,9 +641,6 @@ public class GameFrame extends JFrame {
 
 		Component verticalGlue = Box.createVerticalGlue();
 		GameHintLoading.add(verticalGlue);
-
-
-		//TODO:
 
 		settingPage(btnContinue);
 	}
@@ -725,6 +729,7 @@ public class GameFrame extends JFrame {
 		btnSettingsBackToMain.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				ButtonSound();
 				resetGame();
 				if (hasContinue) {
 					btnContinue.setEnabled(false);
@@ -878,5 +883,26 @@ public class GameFrame extends JFrame {
 
 	public void setLevel(int level) {
 		this.level = level;
+	}
+
+	public void ButtonSound() {
+		try {
+			AudioInputStream click_audio = AudioSystem.getAudioInputStream(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "button_click.wav"));
+			Clip clip = null;
+			try {
+				clip = AudioSystem.getClip();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			clip.open(click_audio);
+			clip.start();
+		} catch (UnsupportedAudioFileException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} catch (LineUnavailableException e1) {
+			e1.printStackTrace();
+		}
+
 	}
 }
