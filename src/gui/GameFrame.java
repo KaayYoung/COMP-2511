@@ -66,7 +66,7 @@ public class GameFrame extends JFrame {
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			
-			ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "setting_background.png")));
+			ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "main_back.jpg")));
 			g.drawImage(img.getImage(), 0, 0, null);
 		}
 	};
@@ -121,6 +121,8 @@ public class GameFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public GameFrame() {
+
+		AudioPlayer.player.start(loop);
 		setTitle("Gridlock 1.0");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
