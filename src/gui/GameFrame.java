@@ -161,7 +161,7 @@ public class GameFrame extends JFrame {
 		btnNewGame.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ButtonSound();
+				 ButtonSound();
 				 cl.show(contentPane, "difficulty");
 			}
 		});
@@ -194,6 +194,7 @@ public class GameFrame extends JFrame {
 		JButton btnSettings = new JButton("Settings");
 		btnSettings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ButtonSound();
 				cl.show(contentPane, "settings");
 			}
 		});
@@ -234,6 +235,7 @@ public class GameFrame extends JFrame {
 		btnDifficultyBackToMain.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				ButtonSound();
 				resetGame();
 				cl.show(contentPane, "mainmenu");
 			}
@@ -252,6 +254,7 @@ public class GameFrame extends JFrame {
 		btnEasy.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				ButtonSound();
 				newGame(Difficulty.EASY, 7);
 				cl.show(contentPane, "game");
 			}
@@ -269,6 +272,7 @@ public class GameFrame extends JFrame {
 		btnMedium.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				ButtonSound();
 				newGame(Difficulty.MEDIUM, 7);
 				cl.show(contentPane, "game");
 			}
@@ -286,6 +290,7 @@ public class GameFrame extends JFrame {
 		btnHard.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				ButtonSound();
 				newGame(Difficulty.HARD, 7);
 				cl.show(contentPane, "game");
 			}
@@ -316,8 +321,13 @@ public class GameFrame extends JFrame {
 		
 		JLayeredPane GameBoardLayeredPane = new JLayeredPane();
 		GamePanel.add(GameBoardLayeredPane);
-		GameBoard.setBounds(1, 1, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE);
+		
+		Grid Grid = new Grid();
+		Grid.setBounds(new Rectangle(200, 110, 547, 547));
+		GameBoardLayeredPane.setLayer(Grid, 0);
+		GameBoardLayeredPane.add(Grid);
 		GameBoardLayeredPane.setLayer(GameBoard, 1);
+		GameBoard.setBounds(200, 110, 546, 546);
 		GameBoardLayeredPane.add(GameBoard);
 		
 		GameBoard.setPreferredSize(new Dimension(Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE));
@@ -325,11 +335,6 @@ public class GameFrame extends JFrame {
 		GameBoard.setMaximumSize(new Dimension(Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE));
 		GameBoard.setLayout(null);
 		GameBoard.setOpaque(false);
-		
-		Grid Grid = new Grid();
-		Grid.setBounds(new Rectangle(200, 100, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE + 1, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE + 1));
-		GameBoardLayeredPane.setLayer(Grid, 0);
-		GameBoardLayeredPane.add(Grid);
 		
 		JPanel GameButtons = new JPanel();
 		GameButtons.setMaximumSize(new Dimension(100, 600));
@@ -417,10 +422,11 @@ public class GameFrame extends JFrame {
 		JPanel GameNavigationButtons = new JPanel();
 		GameButtons.add(GameNavigationButtons, BorderLayout.SOUTH);
 		GameNavigationButtons.setLayout(new BoxLayout(GameNavigationButtons, BoxLayout.X_AXIS));
-		
+		GameNavigationButtons.setOpaque(false);
 		JButton btnGameBackToMain = new JButton("Main Menu");
 		btnGameBackToMain.setMaximumSize(new Dimension(150, 25));
 		btnGameBackToMain.setHorizontalTextPosition(SwingConstants.CENTER);
+		
 		GameNavigationButtons.add(btnGameBackToMain);
 		btnGameBackToMain.addMouseListener(new MouseAdapter() {
 			@Override
@@ -429,11 +435,12 @@ public class GameFrame extends JFrame {
 					btnContinue.setEnabled(true);
 					hasContinue = true;
 				}
+				ButtonSound();
 				cl.show(contentPane, "mainmenu");
 			}
 		});
-		btnGameBackToMain.setPreferredSize(new Dimension(150, 50));
-		btnGameBackToMain.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		btnGameBackToMain.setPreferredSize(new Dimension(200, 80));
+		btnGameBackToMain.setFont(new Font("Segoe UI", Font.PLAIN, 22));
 		btnGameBackToMain.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		JPanel GameOverPanel = new JPanel();
@@ -508,6 +515,7 @@ public class GameFrame extends JFrame {
 					btnContinue.setEnabled(false);
 					hasContinue = false;
 				}
+				ButtonSound();
 				cl.show(contentPane, "mainmenu");
 			}
 		});
@@ -704,25 +712,24 @@ public class GameFrame extends JFrame {
 	}
 	
 	public void ButtonSound() {
-		AudioInputStream click_audio;
 		try {
-			click_audio = AudioSystem.getAudioInputStream(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "button_click.wav"));
-		} catch (UnsupportedAudioFileException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			AudioInputStream click_audio = AudioSystem.getAudioInputStream(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "button_click.wav"));
+			Clip clip = null;
+			try {
+				clip = AudioSystem.getClip();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			clip.open(click_audio);
+			clip.start();
+		} catch (UnsupportedAudioFileException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} catch (LineUnavailableException e1) {
+			e1.printStackTrace();
 		}
-		
-		Clip clip = null;
-		try {
-			clip = AudioSystem.getClip();
-		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		
 	}
+	
 }
