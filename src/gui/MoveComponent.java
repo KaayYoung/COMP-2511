@@ -1,3 +1,5 @@
+package gui;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -6,8 +8,9 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
-import Controller.Board;
-
+import gridlock.Board;
+import gridlock.Car;
+import settings.Settings;
 
 /*Code from internet, needs to be modify*/
 public class MoveComponent extends MouseAdapter
@@ -18,7 +21,7 @@ public class MoveComponent extends MouseAdapter
     private boolean changeCursor = true;
     private boolean autoLayout = false;
 
-    private Class destinationClass;
+    private Class<?> destinationClass;
     private Component destinationComponent;
     private Component destination;
     private Component source;
@@ -36,14 +39,14 @@ public class MoveComponent extends MouseAdapter
     private JLabel label;
     private int carId;
     private Board board;
-    private static final int Car_width = 150;
+    private Car car;
 
-
-    public MoveComponent()
+    public MoveComponent(Car car)
     {
+    	this.car = car;
     }
 
-    public MoveComponent(Class destinationClass, Component... components)
+    public MoveComponent(Class<?> destinationClass, Component... components)
     {
         this.destinationClass = destinationClass;
         registerComponent( components );
@@ -168,37 +171,88 @@ public class MoveComponent extends MouseAdapter
         for(int i = 0; i < carList.size(); i++) {
             JLabel wall = carList.get(i);
             if(wall != label) {
-                // vertical
-                if(locationX >= wall.getBounds().getX() && locationX < wall.getBounds().getX() +  wall.getBounds().getWidth()){
-                    // hit up
-                    if(location.y >= wall.getBounds().getY() + wall.getBounds().getHeight()) {
-                        while(locationY <= wall.getBounds().getY()) {
-                            locationY += snapSize.height;
-                        }
+                
+            	if(direction == 1) {
+            		// vertical
+            		if(locationX >= wall.getBounds().getX() && locationX < wall.getBounds().getX() +  wall.getBounds().getWidth()){
+                        // hit horizontal
+                    	if(label.getBounds().getWidth() != wall.getBounds().getWidth()) {
+                    		// hit up
+                    		if(location.y >= wall.getBounds().getY() + wall.getBounds().getHeight()) {
+                                while(locationY <= wall.getBounds().getY()) {
+                                    locationY += snapSize.height;
+                                }
+                            }
+                            //hit down
+                            if(location.y + label.getBounds().getHeight() <= wall.getBounds().getY()) {
+                                while(locationY+label.getBounds().getHeight() >= wall.getBounds().getY() + wall.getBounds().getHeight()) {
+                                    locationY -= snapSize.height;
+                                }
+                            }
+                    	}
+                    	
+                    	if(label.getBounds().getWidth() == wall.getBounds().getWidth() && location.x == wall.getBounds().getX()) {
+                    		// hit up
+                    		if(location.y >= wall.getBounds().getY() + wall.getBounds().getHeight()) {
+                                while(locationY < wall.getBounds().getY() + Settings.UI_BLOCK_SIZE * car.getLength()) {
+                                    locationY += snapSize.height;
+                                }
+                            }
+                            //hit down
+                            if(location.y + label.getBounds().getHeight() <= wall.getBounds().getY()) {
+                                while(locationY+label.getBounds().getHeight() > wall.getBounds().getY() + wall.getBounds().getHeight() - Settings.UI_BLOCK_SIZE * car.getLength()) {
+                                    locationY -= snapSize.height;
+                                }
+                            }
+                    	}
+        
                     }
-                    //hit down
-                    if(location.y + label.getBounds().getHeight() <= wall.getBounds().getY()) {
-                        while(locationY+label.getBounds().getHeight() >= wall.getBounds().getY() + wall.getBounds().getHeight()) {
-                            locationY -= snapSize.height;
-                        }
-                    }
-                }
+            	}else {
+            		// horizontal
+            		if(locationY >= wall.getBounds().getY() && locationY < wall.getBounds().getY() + wall.getBounds().getHeight()) {
+                        // hit vertical
+                    	if(label.getBounds().getHeight() != wall.getBounds().getHeight()) {
+                    		//hit left
+                    		if(location.x >= wall.getBounds().getX() + wall.getBounds().getWidth()) {
+                                while(locationX <= wall.getBounds().getX()) {
+                                    locationX += snapSize.width;
+                                }
+                            }
+                            //hit right
+                            if(location.x + label.getBounds().getWidth() <= wall.getBounds().getX()) {
+                                while(locationX+label.getBounds().getWidth() >= wall.getBounds().getX() + wall.getBounds().getWidth()) {
+                                    locationX -= snapSize.width;
+                                }
+                            }
+                    	}
+                    	// hit horizontal 
+                    	if(label.getBounds().getHeight() == wall.getBounds().getHeight() && location.y == wall.getBounds().getY()) {
+                    		// hit left
+                    		if(location.x >= wall.getBounds().getX() + wall.getBounds().getWidth()) {//****************************************8
+                                while(locationX < wall.getBounds().getX() + Settings.UI_BLOCK_SIZE * car.getLength()) {
+                                    locationX += snapSize.width;
+                                }
+                            }
+                    		// hit right
+                    		if(location.x + label.getBounds().getWidth() <= wall.getBounds().getX()) {//*******************************************
+                                while(locationX+label.getBounds().getWidth() > wall.getBounds().getX() + wall.getBounds().getWidth() - Settings.UI_BLOCK_SIZE * car.getLength()) {
+                                    locationX -= snapSize.width;
+                                }
+                            }
 
-                // horizontal
-                if(locationY >= wall.getBounds().getY() && locationY < wall.getBounds().getY() + wall.getBounds().getHeight()) {
-                    //hit left
-                    if(location.x >= wall.getBounds().getX() + wall.getBounds().getWidth()) {
-                        while(locationX <= wall.getBounds().getX()) {
-                            locationX += snapSize.width;
-                        }
+                    	}
+                        
                     }
-                    //hit right
-                    if(location.x + label.getBounds().getWidth() <= wall.getBounds().getX()) {
-                        while(locationX+label.getBounds().getWidth() >= wall.getBounds().getX() + wall.getBounds().getWidth()) {
-                            locationX -= snapSize.width;
-                        }
-                    }
-                }
+            	}
+                
+
+                
+                
+                
+
+                
+                
+                
             }
         }
 
@@ -238,16 +292,30 @@ public class MoveComponent extends MouseAdapter
     @Override
     public void mouseReleased(MouseEvent e)
     {
+    	JLabel label = (JLabel)e.getSource();
+    	GameFrame frame = (GameFrame)SwingUtilities.getRoot(label);
+
         int changeCol = 0;
         int changeRow = 0;
+        int rowBefore = 0;
+        int colBefore = 0;
+        
         if(direction == 1) {
-            changeCol = (int)label.getBounds().getX()/Car_width;
-            changeRow = ((int)label.getBounds().getY()+(int)label.getBounds().getHeight())/Car_width;
+            changeCol = (int)label.getBounds().getX()/Settings.UI_BLOCK_SIZE;
+            changeRow = ((int)label.getBounds().getY()+(int)label.getBounds().getHeight())/Settings.UI_BLOCK_SIZE;
+            rowBefore = board.getCar(carId).getPosRow();
             board.changeCarPos(carId, changeRow-1, changeCol);
+            frame.updateMoves(Math.abs(rowBefore - changeRow + 1));
         }else if(direction == 0) {
-            changeCol = (int)label.getBounds().getX()/Car_width;
-            changeRow = (int)label.getBounds().getY()/Car_width;
-            board.changeCarPos(carId, (int)label.getBounds().getY()/Car_width, (int)label.getBounds().getX()/Car_width);
+            changeCol = (int)label.getBounds().getX()/Settings.UI_BLOCK_SIZE;
+            changeRow = (int)label.getBounds().getY()/Settings.UI_BLOCK_SIZE;
+            colBefore = board.getCar(carId).getPosCol();
+            board.changeCarPos(carId, (int)label.getBounds().getY()/Settings.UI_BLOCK_SIZE, (int)label.getBounds().getX()/Settings.UI_BLOCK_SIZE);
+            frame.updateMoves(Math.abs(changeCol - colBefore));
+        }
+        
+        if (board.isSolved()) {
+        	frame.gameOver();
         }
 
 

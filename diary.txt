@@ -1,0 +1,69 @@
+﻿17/04/2018 - Group Meeting
+
+1. who are the intended users: are they novice, intermediate or expert, or all sorts of users (do we even understand what this means?)
+All sorts of users (since we can set difficulty to make the game more challenging)
+2. what sort of features are basic to the application (i.e. needed by every user)?
+Basic interface (Menus, continue, select difficulty, game over screen, help, exit button)
+Always have to have >= 1 solutions
+3. what sort of features are needed by different categories of users: how can the interface handle seemingly different requirements?
+If the difficult increases then increase the number of cars on screen
+4. what sort of help or hints (if any) should the system be able to provide to users (and how and when is this help given)?
+Base on the current state of the board, highlight the next car to be moved
+Help button to display texts (how to play the game)
+5. what platforms with what form factors is the system designed to run on?
+Runs on PC
+
+Algorithms:
+BFS
+A*
+IDA*
+
+Classes:
+Board (size, difficulty, state) - 2d array (Board generator, Board solver, add cars, array2graph)
+Car (length, direction, color)
+Player (id, score, moves)
+Interface (menu, help, hints...)
+System (create board, create players, save highscores)
+
+08/05/2018
+Interface:
+Board (6x6 Grid - 800px x 600px)
+Car (Max Width/Height = 3 Blocks, fill with color?)
+Buttons (New Game, Restart, Difficulty/Select Stage, Solve, Quit)
+Menu (Containing buttons?)
+Logic:
+Car select: Only 1 car can be selected at a time, once selected, the car can be dragged horizontally/vertically based on it’s attribute
+Car collision: A car must stop moving when collided with another car or wall
+Grid snapping: A car must snap into blocks closest to its position
+Restart button will recreate the initial state of that same stage
+New Game will generate another random stage
+Solve/Hint button will highlight the car that needs to move next
+Check for car positions and snap it into grid
+
+09/05/2018
+Merge Board and state
+Create a simple bfs search
+Everything works as intended
+todo: add better search algos
+
+12/05/2018
+Completed A* Search
+TODO: Add more heuristics
+TODO: Refactor code
+
+13/05/2018
+Changing List to HashSet for AStar, improving performance significantly
+Making BoardGenerator works
+
+14/05/2018
+Added Settings for global variables
+Fixed some issues with hashSet collisions
+Made BoardGenerator and Solver into 2 main files
+Rework basic interface
+
+15/05/2018
+Changed jdk-10 to jre-1.8.0
+Added Game Over screen
+Added Settings page
+Fixed Car collision bugs
+TODO: Level select & save highscore
