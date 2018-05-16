@@ -18,7 +18,11 @@ import sun.audio.AudioStream;
 import sun.audio.ContinuousAudioDataStream;
 
 import javax.swing.JButton;
-
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -157,6 +161,7 @@ public class GameFrame extends JFrame {
 		btnNewGame.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				ButtonSound();
 				 cl.show(contentPane, "difficulty");
 			}
 		});
@@ -696,5 +701,28 @@ public class GameFrame extends JFrame {
 	 */
 	public void setDifficulty(Difficulty difficulty) {
 		this.difficulty = difficulty;
+	}
+	
+	public void ButtonSound() {
+		AudioInputStream click_audio;
+		try {
+			click_audio = AudioSystem.getAudioInputStream(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "button_click.wav"));
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Clip clip = null;
+		try {
+			clip = AudioSystem.getClip();
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 }
