@@ -62,17 +62,26 @@ public class GameFrame extends JFrame {
 	
 	CardLayout cl = new CardLayout();
 	JPanel MainMenuPanel = new JPanel() {
-		@Override
+
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			
-			ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "main_back.jpg")));
+			ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "main_background.jpg")));
 			g.drawImage(img.getImage(), 0, 0, null);
 		}
 	};
-	JPanel DifficultyPanel = new JPanel();
+	JPanel DifficultyPanel = new JPanel() {
+
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			
+			ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "difficulty_background.jpg")));
+			g.drawImage(img.getImage(), 0, 0, null);
+		}
+	};
+	
 	JPanel GamePanel = new JPanel() {
-		@Override
+
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			
@@ -228,6 +237,7 @@ public class GameFrame extends JFrame {
 		DifficultyPanel.setLayout(new BorderLayout(0, 0));
 		
 		JPanel DifficultyBackButtons = new JPanel();
+		DifficultyBackButtons.setOpaque(false);
 		DifficultyPanel.add(DifficultyBackButtons, BorderLayout.SOUTH);
 		
 		JButton btnDifficultyBackToMain = new JButton("Back to Main Menu");
@@ -247,6 +257,7 @@ public class GameFrame extends JFrame {
 		btnDifficultyBackToMain.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		JPanel DifficultyButtons = new JPanel();
+		DifficultyButtons.setOpaque(false);
 		DifficultyPanel.add(DifficultyButtons);
 		DifficultyButtons.setLayout(new BoxLayout(DifficultyButtons, BoxLayout.PAGE_AXIS));
 		
@@ -307,6 +318,7 @@ public class GameFrame extends JFrame {
 		DifficultyButtons.add(Box.createVerticalGlue());
 		
 		JPanel DifficultyTitle = new JPanel();
+		DifficultyTitle.setOpaque(false);
 		DifficultyPanel.add(DifficultyTitle, BorderLayout.NORTH);
 		DifficultyTitle.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
