@@ -263,8 +263,8 @@ public class GameFrame extends JFrame {
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				SelectLevelButtons.removeAll();
 				ButtonSound();
+				SelectLevelButtons.removeAll();
 				cl.show(contentPane, "mainmenu");
 			}
 		});
@@ -296,6 +296,7 @@ public class GameFrame extends JFrame {
 		btnDifficultyBackToMain.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				ButtonSound();
 				resetGame();
 				cl.show(contentPane, "mainmenu");
 			}
@@ -384,7 +385,7 @@ public class GameFrame extends JFrame {
 		JLayeredPane GameBoardLayeredPane = new JLayeredPane();
 
 		GamePanel.add(GameBoardLayeredPane);
-		GameBoard.setBounds(1, 1, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE);
+		GameBoard.setBounds(200, 110, 547, 547);
 		GameBoardLayeredPane.setLayer(GameBoard, 1);
 		GameBoardLayeredPane.add(GameBoard);
 
@@ -395,7 +396,7 @@ public class GameFrame extends JFrame {
 		GameBoard.setOpaque(false);
 
 		Grid Grid = new Grid();
-		Grid.setBounds(new Rectangle(0, 0, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE + 1, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE + 1));
+		Grid.setBounds(new Rectangle(200, 110, 547, 547));
 		GameBoardLayeredPane.setLayer(Grid, 0);
 		GameBoardLayeredPane.add(Grid);
 
@@ -501,6 +502,7 @@ public class GameFrame extends JFrame {
 		btnGameBackToMain.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				ButtonSound();
 				if (!hasContinue) {
 					btnContinue.setEnabled(true);
 					hasContinue = true;

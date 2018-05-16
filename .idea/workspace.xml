@@ -17,8 +17,8 @@
       <file leaf-file-name="GameFrame.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/gui/GameFrame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="731" column="30" selection-start-line="731" selection-start-column="30" selection-end-line="731" selection-end-column="30" />
+            <state relative-caret-position="91">
+              <caret line="387" column="46" selection-start-line="387" selection-start-column="46" selection-end-line="387" selection-end-column="46" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1257#1551#0" expanded="true" />
@@ -50,6 +50,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>btnCon</find>
+      <find>back</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -208,12 +209,12 @@
       <option name="presentableId" value="Default" />
       <updated>1526467278854</updated>
       <workItem from="1526467280651" duration="679000" />
-      <workItem from="1526510493352" duration="2482000" />
+      <workItem from="1526510493352" duration="3091000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3161000" />
+    <option name="totallyTimeSpent" value="3770000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1513" height="973" extended-state="6" />
@@ -306,8 +307,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/gui/GameFrame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="731" column="30" selection-start-line="731" selection-start-column="30" selection-end-line="731" selection-end-column="30" />
+        <state relative-caret-position="91">
+          <caret line="387" column="46" selection-start-line="387" selection-start-column="46" selection-end-line="387" selection-end-column="46" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1257#1551#0" expanded="true" />
