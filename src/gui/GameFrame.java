@@ -1,120 +1,101 @@
 package gui;
-import java.awt.BorderLayout;
+import java.awt.*;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import gridlock.Board;
 import gridlock.BoardIO;
+import gridlock.Player;
 import search.Heuristic;
 import search.HeuristicCarsInfront;
 import search.SearchAlgorithm;
 import search.SearchAlgorithmAStar;
 import settings.Settings;
+import settings.Settings.Difficulty;
 import sun.audio.AudioData;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 import sun.audio.ContinuousAudioDataStream;
 
-import javax.swing.JButton;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.awt.CardLayout;
+import java.util.*;
 
-import javax.swing.JLayeredPane;
-import java.awt.Rectangle;
-import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.List;
 
 public class GameFrame extends JFrame {
 	private static final long serialVersionUID = -5739699646629372557L;
-	
-	private enum Difficulty {
-		EASY,
-		MEDIUM,
-		HARD
-	}
-	private JPanel contentPane;
-	private Difficulty difficulty = Difficulty.EASY;
-	
-	CardLayout cl = new CardLayout();
-	JPanel MainMenuPanel = new JPanel() {
 
+	private JPanel contentPane;
+	private JPanel GameOverScoreInfo;
+	private Difficulty difficulty = Difficulty.EASY;
+	private int level = 0;
+
+	CardLayout cl = new CardLayout();
+	CardLayout cl_gameover = new CardLayout();
+	JPanel MainMenuPanel = new JPanel() {
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			
+
 			ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "main_background.jpg")));
 			g.drawImage(img.getImage(), 0, 0, null);
 		}
 	};
 	JPanel DifficultyPanel = new JPanel() {
-
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			
+
 			ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "difficulty_background.jpg")));
 			g.drawImage(img.getImage(), 0, 0, null);
 		}
 	};
-	
 	JPanel GamePanel = new JPanel() {
-
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			
+
 			ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "board_background.jpg")));
 			g.drawImage(img.getImage(), 0, 0, null);
 		}
 	};
 	JPanel GameBoard = new JPanel();
-	
 	JPanel GameHintLoading = new JPanel();
 	JLabel lblMovesscore;
 	JLabel lblHighscorescore;
 	JLabel lblDifficultyscore;
 	JLabel lblYourScore;
-	JLabel lblBestScore;
-	
+	JLabel lblLevellevel;
+	JPanel GameOverHighScore;
+	JPanel SelectLevelButtons;
+
 	private static ArrayList<JLabel> carList = new ArrayList<JLabel>();
 	private static ArrayList<MoveComponent> moveList = new ArrayList<MoveComponent>();
 	private int moves = 0;
 	private boolean hasContinue = false;
 	private Board board;
-	
-	
+	private JTextField txtEnterYourName;
+
+	private List<Player> highScore;
+
 	static InputStream bgm = GameFrame.class.getClassLoader().getResourceAsStream(Settings.PATH_UI_IMAGES + "background.wav");
 	static AudioStream s;
+
 	static {
 		try {
 			s = new AudioStream(bgm);
-		} catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+
 	static AudioData audioData;
+
 	static {
 		try {
 			audioData = s.getData();
@@ -122,48 +103,50 @@ public class GameFrame extends JFrame {
 			e.printStackTrace();
 		}
 	}
+
 	static ContinuousAudioDataStream loop = new ContinuousAudioDataStream(audioData);
 	boolean isplaying = true;
-	
-	
+
 	/**
 	 * Create the frame.
 	 */
 	public GameFrame() {
-
-		AudioPlayer.player.start(loop);
 		setTitle("Gridlock 1.0");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, Settings.UI_FRAME_WIDTH, Settings.UI_FRAME_HEIGHT);
+
+		// Start bgm
+		AudioPlayer.player.start(loop);
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(cl);
-		
+
 		contentPane.add(MainMenuPanel, "mainmenu");
 		cl.show(contentPane, "mainmenu");
-		
+
 		MainMenuPanel.setLayout(new BoxLayout(MainMenuPanel, BoxLayout.PAGE_AXIS));
-		
+
 		JPanel MainMenuTitle = new JPanel();
 		MainMenuTitle.setOpaque(false);
 		MainMenuPanel.add(MainMenuTitle);
 		MainMenuTitle.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
+
 		JLabel lblGridlock = new JLabel("GridLock");
 		MainMenuTitle.add(lblGridlock);
 		lblGridlock.setFont(new Font("Segoe UI", Font.PLAIN, 90));
 		lblGridlock.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblGridlock.setHorizontalAlignment(SwingConstants.CENTER);
-		
+
 		JPanel MainMenuButtons = new JPanel();
-		MainMenuButtons.setOpaque(false);
 		MainMenuPanel.add(MainMenuButtons);
+		MainMenuButtons.setOpaque(false);
 		MainMenuPanel.add(Box.createVerticalGlue());
-		
+
 		MainMenuButtons.setLayout(new BoxLayout(MainMenuButtons, BoxLayout.Y_AXIS));
-		
+
 		JButton btnNewGame = new JButton("New Game");
 		btnNewGame.setFont(new Font("Segoe UI", Font.PLAIN, 30));
 		btnNewGame.setMaximumSize(new Dimension(300, 75));
@@ -172,21 +155,22 @@ public class GameFrame extends JFrame {
 		btnNewGame.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				 ButtonSound();
-				 cl.show(contentPane, "difficulty");
+				//ButtonSound();
+				cl.show(contentPane, "difficulty");
 			}
 		});
 		btnNewGame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		MainMenuButtons.add(btnNewGame);
 		btnNewGame.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
+
 		MainMenuButtons.add(Box.createVerticalStrut(20));
-		
+
 		JButton btnContinue = new JButton("Continue");
 		btnContinue.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if (hasContinue) {
+					//ButtonSound();
 					cl.show(contentPane, "game");
 				}
 			}
@@ -198,14 +182,13 @@ public class GameFrame extends JFrame {
 		btnContinue.setFont(new Font("Segoe UI", Font.PLAIN, 30));
 		btnContinue.setAlignmentX(Component.CENTER_ALIGNMENT);
 		MainMenuButtons.add(btnContinue);
-		
+
 		Component verticalStrut_1 = Box.createVerticalStrut(20);
 		MainMenuButtons.add(verticalStrut_1);
-		
+
 		JButton btnSettings = new JButton("Settings");
 		btnSettings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ButtonSound();
 				cl.show(contentPane, "settings");
 			}
 		});
@@ -216,9 +199,9 @@ public class GameFrame extends JFrame {
 		btnSettings.setSize(new Dimension(300, 100));
 		MainMenuButtons.add(btnSettings);
 		btnSettings.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
+
 		MainMenuButtons.add(Box.createVerticalStrut(20));
-		
+
 		JButton btnQuit = new JButton("Quit");
 		btnQuit.setMinimumSize(new Dimension(300, 75));
 		btnQuit.addMouseListener(new MouseAdapter() {
@@ -232,14 +215,77 @@ public class GameFrame extends JFrame {
 		btnQuit.setPreferredSize(new Dimension(300, 75));
 		MainMenuButtons.add(btnQuit);
 		btnQuit.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
+
+		JPanel SelectLevelPanel = new JPanel();
+		contentPane.add(SelectLevelPanel, "levelselect");
+		SelectLevelPanel.setLayout(new BorderLayout(0, 0));
+
+		JPanel SelectLevelTitle = new JPanel();
+		SelectLevelTitle.setOpaque(false);
+		SelectLevelPanel.add(SelectLevelTitle, BorderLayout.NORTH);
+		SelectLevelTitle.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		JLabel lblSelectLevel = new JLabel("Select Level");
+		lblSelectLevel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSelectLevel.setFont(new Font("Segoe UI", Font.PLAIN, 90));
+		lblSelectLevel.setAlignmentX(0.5f);
+		SelectLevelTitle.add(lblSelectLevel);
+
+		JPanel SelectLevelBackButtons = new JPanel();
+		SelectLevelBackButtons.setOpaque(false);
+		SelectLevelPanel.add(SelectLevelBackButtons, BorderLayout.SOUTH);
+		SelectLevelBackButtons.setLayout(new BoxLayout(SelectLevelBackButtons, BoxLayout.X_AXIS));
+
+		Component horizontalGlue = Box.createHorizontalGlue();
+		SelectLevelBackButtons.add(horizontalGlue);
+
+		JButton btnBackToDifficulty = new JButton("Back to Difficulty");
+		btnBackToDifficulty.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				SelectLevelButtons.removeAll();
+				// ButtonSound();
+				cl.show(contentPane, "difficulty");
+			}
+		});
+		btnBackToDifficulty.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		btnBackToDifficulty.setPreferredSize(new Dimension(300, 50));
+		btnBackToDifficulty.setMinimumSize(new Dimension(300, 50));
+		btnBackToDifficulty.setMaximumSize(new Dimension(300, 50));
+		SelectLevelBackButtons.add(btnBackToDifficulty);
+
+		Component horizontalStrut = Box.createHorizontalStrut(50);
+		SelectLevelBackButtons.add(horizontalStrut);
+
+		JButton button = new JButton("Back to Main Menu");
+		button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				SelectLevelButtons.removeAll();
+				cl.show(contentPane, "mainmenu");
+			}
+		});
+		button.setPreferredSize(new Dimension(300, 50));
+		button.setMinimumSize(new Dimension(300, 50));
+		button.setMaximumSize(new Dimension(300, 50));
+		button.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		button.setAlignmentX(0.5f);
+		SelectLevelBackButtons.add(button);
+
+		Component horizontalGlue_1 = Box.createHorizontalGlue();
+		SelectLevelBackButtons.add(horizontalGlue_1);
+
+		SelectLevelButtons = new JPanel();
+		SelectLevelPanel.add(SelectLevelButtons, BorderLayout.CENTER);
+		SelectLevelButtons.setLayout(new BoxLayout(SelectLevelButtons, BoxLayout.X_AXIS));
+
 		contentPane.add(DifficultyPanel, "difficulty");
 		DifficultyPanel.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel DifficultyBackButtons = new JPanel();
 		DifficultyBackButtons.setOpaque(false);
 		DifficultyPanel.add(DifficultyBackButtons, BorderLayout.SOUTH);
-		
+
 		JButton btnDifficultyBackToMain = new JButton("Back to Main Menu");
 		btnDifficultyBackToMain.setMinimumSize(new Dimension(300, 50));
 		btnDifficultyBackToMain.setMaximumSize(new Dimension(300, 50));
@@ -247,7 +293,6 @@ public class GameFrame extends JFrame {
 		btnDifficultyBackToMain.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ButtonSound();
 				resetGame();
 				cl.show(contentPane, "mainmenu");
 			}
@@ -255,21 +300,20 @@ public class GameFrame extends JFrame {
 		btnDifficultyBackToMain.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		btnDifficultyBackToMain.setPreferredSize(new Dimension(300, 50));
 		btnDifficultyBackToMain.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
+
 		JPanel DifficultyButtons = new JPanel();
 		DifficultyButtons.setOpaque(false);
 		DifficultyPanel.add(DifficultyButtons);
 		DifficultyButtons.setLayout(new BoxLayout(DifficultyButtons, BoxLayout.PAGE_AXIS));
-		
+
 		DifficultyButtons.add(Box.createVerticalGlue());
-		
+
 		JButton btnEasy = new JButton("Easy");
 		btnEasy.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ButtonSound();
-				newGame(Difficulty.EASY, 7);
-				cl.show(contentPane, "game");
+				levelSelect(Difficulty.EASY);
+				cl.show(contentPane, "levelselect");
 			}
 		});
 		btnEasy.setFont(new Font("Segoe UI", Font.PLAIN, 30));
@@ -278,16 +322,15 @@ public class GameFrame extends JFrame {
 		btnEasy.setMaximumSize(new Dimension(300, 100));
 		btnEasy.setAlignmentX(Component.CENTER_ALIGNMENT);
 		DifficultyButtons.add(btnEasy);
-		
+
 		DifficultyButtons.add(Box.createVerticalStrut(20));
-		
+
 		JButton btnMedium = new JButton("Medium");
 		btnMedium.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ButtonSound();
-				newGame(Difficulty.MEDIUM, 7);
-				cl.show(contentPane, "game");
+				levelSelect(Difficulty.MEDIUM);
+				cl.show(contentPane, "levelselect");
 			}
 		});
 		btnMedium.setFont(new Font("Segoe UI", Font.PLAIN, 30));
@@ -296,16 +339,15 @@ public class GameFrame extends JFrame {
 		btnMedium.setPreferredSize(new Dimension(30, 100));
 		btnMedium.setAlignmentX(Component.CENTER_ALIGNMENT);
 		DifficultyButtons.add(btnMedium);
-		
+
 		DifficultyButtons.add(Box.createVerticalStrut(20));
-		
+
 		JButton btnHard = new JButton("Hard");
 		btnHard.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ButtonSound();
-				newGame(Difficulty.HARD, 7);
-				cl.show(contentPane, "game");
+				levelSelect(Difficulty.HARD);
+				cl.show(contentPane, "levelselect");
 			}
 		});
 		btnHard.setFont(new Font("Segoe UI", Font.PLAIN, 30));
@@ -314,85 +356,93 @@ public class GameFrame extends JFrame {
 		btnHard.setMinimumSize(new Dimension(300, 100));
 		btnHard.setAlignmentX(Component.CENTER_ALIGNMENT);
 		DifficultyButtons.add(btnHard);
-		
+
 		DifficultyButtons.add(Box.createVerticalGlue());
-		
+
 		JPanel DifficultyTitle = new JPanel();
 		DifficultyTitle.setOpaque(false);
 		DifficultyPanel.add(DifficultyTitle, BorderLayout.NORTH);
 		DifficultyTitle.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
+
 		JLabel lblDifficultyTitle = new JLabel("Select Difficulty");
 		lblDifficultyTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDifficultyTitle.setFont(new Font("Segoe UI", Font.PLAIN, 90));
 		lblDifficultyTitle.setAlignmentX(0.5f);
 		DifficultyTitle.add(lblDifficultyTitle);
 		GamePanel.setMaximumSize(new Dimension(1, 32767));
-		//GamePanel.setOpaque(false);
-		
+		GamePanel.setOpaque(false);
+
 		contentPane.add(GamePanel, "game");
 		GamePanel.setLayout(new BoxLayout(GamePanel, BoxLayout.X_AXIS));
-		
+
 		JLayeredPane GameBoardLayeredPane = new JLayeredPane();
+
 		GamePanel.add(GameBoardLayeredPane);
-		
-		Grid Grid = new Grid();
-		Grid.setBounds(new Rectangle(200, 110, 547, 547));
-		GameBoardLayeredPane.setLayer(Grid, 0);
-		GameBoardLayeredPane.add(Grid);
+		GameBoard.setBounds(1, 1, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE);
 		GameBoardLayeredPane.setLayer(GameBoard, 1);
-		GameBoard.setBounds(200, 110, 546, 546);
 		GameBoardLayeredPane.add(GameBoard);
-		
+
 		GameBoard.setPreferredSize(new Dimension(Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE));
 		GameBoard.setMinimumSize(new Dimension(Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE));
 		GameBoard.setMaximumSize(new Dimension(Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE));
 		GameBoard.setLayout(null);
 		GameBoard.setOpaque(false);
-		
+
+		Grid Grid = new Grid();
+		Grid.setBounds(new Rectangle(0, 0, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE + 1, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE + 1));
+		GameBoardLayeredPane.setLayer(Grid, 0);
+		GameBoardLayeredPane.add(Grid);
+
 		JPanel GameButtons = new JPanel();
+		GameButtons.setOpaque(false);
 		GameButtons.setMaximumSize(new Dimension(100, 600));
 		GamePanel.add(GameButtons);
 		GameButtons.setLayout(new BorderLayout(0, 0));
-		GameButtons.setOpaque(false);
-		
+
 		JPanel GameInfo = new JPanel();
+		GameInfo.setOpaque(false);
 		GameInfo.setMaximumSize(new Dimension(100, 300));
 		GameButtons.add(GameInfo, BorderLayout.NORTH);
 		GameInfo.setLayout(new BorderLayout(0, 0));
-		GameInfo.setOpaque(false);
-		
+
 		JPanel GameScoreLabels = new JPanel();
+		GameScoreLabels.setOpaque(false);
 		GameInfo.add(GameScoreLabels, BorderLayout.WEST);
 		GameScoreLabels.setLayout(new BoxLayout(GameScoreLabels, BoxLayout.Y_AXIS));
-		GameScoreLabels.setOpaque(false);
-		
+
 		JLabel lblDifficulty = new JLabel("Difficulty: ");
 		GameScoreLabels.add(lblDifficulty);
-		
+
+		JLabel lblLevel = new JLabel("Level");
+		GameScoreLabels.add(lblLevel);
+
 		JLabel lblMoves = new JLabel("Moves: ");
 		GameScoreLabels.add(lblMoves);
-		
+
 		JLabel lblHighscore = new JLabel("Highscore: ");
 		GameScoreLabels.add(lblHighscore);
-		
+
 		JPanel GameScore = new JPanel();
+		GameScore.setOpaque(false);
 		GameInfo.add(GameScore, BorderLayout.CENTER);
 		GameScore.setLayout(new BoxLayout(GameScore, BoxLayout.Y_AXIS));
-		GameScore.setOpaque(false);
-		
+
 		lblDifficultyscore = new JLabel("Easy");
 		lblDifficultyscore.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		GameScore.add(lblDifficultyscore);
-		
+
+		lblLevellevel = new JLabel("0");
+		lblLevellevel.setAlignmentX(1.0f);
+		GameScore.add(lblLevellevel);
+
 		lblMovesscore = new JLabel("0");
 		lblMovesscore.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		GameScore.add(lblMovesscore);
-		
+
 		lblHighscorescore = new JLabel("0");
 		lblHighscorescore.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		GameScore.add(lblHighscorescore);
-		
+
 		JButton btnHint = new JButton("Hint");
 		btnHint.addMouseListener(new MouseAdapter() {
 			@Override
@@ -403,28 +453,28 @@ public class GameFrame extends JFrame {
 				if (solution.size() > 0) {
 					cl.show(contentPane, "hintloading");
 					GameBoard.removeAll();
-	
+
 					board = solution.get(1);
 					CarCreate car = new CarCreate(board);
-			        car.createCarList();
-			        carList = car.getCarList();
-			        moveList = car.getMoveList();
-			        
-			        for(int i = 0; i < carList.size(); i++) {
-			            JLabel c = carList.get(i);
-			            GameBoard.add(c);
-			        }
-	
-			        for(int i = 0; i < moveList.size(); i++) {
-			            MoveComponent c = moveList.get(i);
-			            c.setCarList(carList);
-			        }
-			        
-			        cl.show(contentPane, "game");
-			        
-			        if (board.isSolved()) {
-			        	gameOver();
-			        }
+					car.createCarList();
+					carList = car.getCarList();
+					moveList = car.getMoveList();
+
+					for (int i = 0; i < carList.size(); i++) {
+						JLabel c = carList.get(i);
+						GameBoard.add(c);
+					}
+
+					for (int i = 0; i < moveList.size(); i++) {
+						MoveComponent c = moveList.get(i);
+						c.setCarList(carList);
+					}
+
+					cl.show(contentPane, "game");
+
+					if (board.isSolved()) {
+						gameOver();
+					}
 				}
 			}
 		});
@@ -432,15 +482,15 @@ public class GameFrame extends JFrame {
 		btnHint.setMinimumSize(new Dimension(150, 25));
 		btnHint.setMaximumSize(new Dimension(150, 25));
 		GameInfo.add(btnHint, BorderLayout.SOUTH);
-		
+
 		JPanel GameNavigationButtons = new JPanel();
+		GameNavigationButtons.setOpaque(false);
 		GameButtons.add(GameNavigationButtons, BorderLayout.SOUTH);
 		GameNavigationButtons.setLayout(new BoxLayout(GameNavigationButtons, BoxLayout.X_AXIS));
-		GameNavigationButtons.setOpaque(false);
+
 		JButton btnGameBackToMain = new JButton("Main Menu");
 		btnGameBackToMain.setMaximumSize(new Dimension(150, 25));
 		btnGameBackToMain.setHorizontalTextPosition(SwingConstants.CENTER);
-		
 		GameNavigationButtons.add(btnGameBackToMain);
 		btnGameBackToMain.addMouseListener(new MouseAdapter() {
 			@Override
@@ -449,75 +499,108 @@ public class GameFrame extends JFrame {
 					btnContinue.setEnabled(true);
 					hasContinue = true;
 				}
-				ButtonSound();
 				cl.show(contentPane, "mainmenu");
 			}
 		});
-		btnGameBackToMain.setPreferredSize(new Dimension(200, 80));
-		btnGameBackToMain.setFont(new Font("Segoe UI", Font.PLAIN, 22));
+		btnGameBackToMain.setPreferredSize(new Dimension(150, 50));
+		btnGameBackToMain.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		btnGameBackToMain.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
+
 		JPanel GameOverPanel = new JPanel();
+		GameOverPanel.setOpaque(false);
 		contentPane.add(GameOverPanel, "gameover");
 		GameOverPanel.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel GameOverTitle = new JPanel();
+		GameOverTitle.setOpaque(false);
 		GameOverPanel.add(GameOverTitle, BorderLayout.NORTH);
-		
+
 		JLabel lblGameOver = new JLabel("Game Over");
 		lblGameOver.setFont(new Font("Segoe UI", Font.PLAIN, 90));
 		GameOverTitle.add(lblGameOver);
-		
+
 		JPanel GameOverScore = new JPanel();
+		GameOverScore.setOpaque(false);
 		GameOverPanel.add(GameOverScore, BorderLayout.CENTER);
 		GameOverScore.setLayout(new BoxLayout(GameOverScore, BoxLayout.Y_AXIS));
-		
+
 		GameOverScore.add(Box.createVerticalStrut(50));
-		
+
 		JPanel GameOverCongrats = new JPanel();
+		GameOverCongrats.setOpaque(false);
 		GameOverScore.add(GameOverCongrats);
 		GameOverCongrats.setLayout(new BoxLayout(GameOverCongrats, BoxLayout.X_AXIS));
-		
+
 		JLabel lblCongratulationYouHave = new JLabel("Congratulation! You have solved the puzzle.");
 		GameOverCongrats.add(lblCongratulationYouHave);
 		lblCongratulationYouHave.setFont(new Font("Segoe UI", Font.PLAIN, 30));
 		lblCongratulationYouHave.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
+
 		GameOverScore.add(Box.createVerticalStrut(50));
-		
-		JPanel GameOverScoreInfo = new JPanel();
+
+		GameOverScoreInfo = new JPanel();
 		GameOverScore.add(GameOverScoreInfo);
-		GameOverScoreInfo.setLayout(new BoxLayout(GameOverScoreInfo, BoxLayout.X_AXIS));
-		
-		JPanel ScoreText = new JPanel();
-		GameOverScoreInfo.add(ScoreText);
-		ScoreText.setLayout(new BoxLayout(ScoreText, BoxLayout.Y_AXIS));
-		
-		JLabel lblYourMoves = new JLabel("Your moves: ");
-		lblYourMoves.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		ScoreText.add(lblYourMoves);
-		lblYourMoves.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
-		JLabel lblBestMoves = new JLabel("Best moves:");
-		lblBestMoves.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		ScoreText.add(lblBestMoves);
-		lblBestMoves.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
-		JPanel ScoreInfo = new JPanel();
-		GameOverScoreInfo.add(ScoreInfo);
-		ScoreInfo.setLayout(new BoxLayout(ScoreInfo, BoxLayout.Y_AXIS));
-		
-		lblYourScore = new JLabel("Your Score");
+		GameOverScoreInfo.setLayout(cl_gameover);
+
+		JPanel GameOverEnterName = new JPanel();
+		GameOverEnterName.setOpaque(false);
+		GameOverEnterName.setPreferredSize(new Dimension(600, 300));
+		GameOverEnterName.setMaximumSize(new Dimension(32767, 300));
+		GameOverScoreInfo.add(GameOverEnterName, "entername");
+		GameOverEnterName.setLayout(new BoxLayout(GameOverEnterName, BoxLayout.Y_AXIS));
+
+		JPanel YourScore = new JPanel();
+		YourScore.setOpaque(false);
+		GameOverEnterName.add(YourScore);
+
+		lblYourScore = new JLabel("Your score: 0");
 		lblYourScore.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		ScoreInfo.add(lblYourScore);
-		
-		lblBestScore = new JLabel("Best Score");
-		lblBestScore.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		ScoreInfo.add(lblBestScore);
-		
+		YourScore.add(lblYourScore);
+
+		JPanel EnterName = new JPanel();
+		EnterName.setOpaque(false);
+		GameOverEnterName.add(EnterName);
+
+		JLabel lblYourName = new JLabel("Your name: ");
+		EnterName.add(lblYourName);
+		lblYourName.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+
+		JLabel label = new JLabel("");
+		EnterName.add(label);
+
+		JLabel label_1 = new JLabel("");
+		EnterName.add(label_1);
+
+		txtEnterYourName = new JTextField();
+		txtEnterYourName.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					showHighScore();
+				}
+			}
+		});
+		EnterName.add(txtEnterYourName);
+		txtEnterYourName.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+		txtEnterYourName.setColumns(10);
+
+		JButton btnSubmit = new JButton("Submit");
+		btnSubmit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				showHighScore();
+			}
+		});
+		EnterName.add(btnSubmit);
+		btnSubmit.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+
+		GameOverHighScore = new JPanel();
+		GameOverScoreInfo.add(GameOverHighScore, "highscore");
+		GameOverHighScore.setLayout(new BoxLayout(GameOverHighScore, BoxLayout.Y_AXIS));
+
 		Component verticalStrut = Box.createVerticalStrut(25);
 		GameOverScore.add(verticalStrut);
-		
+
 		JButton btnGameOverBackToMain = new JButton("Back to Main Menu");
 		btnGameOverBackToMain.setAlignmentX(Component.CENTER_ALIGNMENT);
 		GameOverScore.add(btnGameOverBackToMain);
@@ -529,7 +612,6 @@ public class GameFrame extends JFrame {
 					btnContinue.setEnabled(false);
 					hasContinue = false;
 				}
-				ButtonSound();
 				cl.show(contentPane, "mainmenu");
 			}
 		});
@@ -537,30 +619,153 @@ public class GameFrame extends JFrame {
 		btnGameOverBackToMain.setMinimumSize(new Dimension(300, 50));
 		btnGameOverBackToMain.setMaximumSize(new Dimension(300, 50));
 		btnGameOverBackToMain.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		
+
 		GameHintLoading = new JPanel();
 		contentPane.add(GameHintLoading, "hintloading");
 		GameHintLoading.setLayout(new BoxLayout(GameHintLoading, BoxLayout.Y_AXIS));
-		
+
 		Component verticalGlue_1 = Box.createVerticalGlue();
 		GameHintLoading.add(verticalGlue_1);
-		
+
 		JLabel lblLoadingSolutions = new JLabel("Loading Solutions ...");
 		lblLoadingSolutions.setFont(new Font("Segoe UI", Font.PLAIN, 60));
 		lblLoadingSolutions.setAlignmentX(Component.CENTER_ALIGNMENT);
 		GameHintLoading.add(lblLoadingSolutions);
-		
+
 		Component verticalGlue = Box.createVerticalGlue();
 		GameHintLoading.add(verticalGlue);
-		
-		
-		settingPage();
-		
+
+
+		//TODO:
+
+		settingPage(btnContinue);
+	}
+
+	public void settingPage(JButton btnContinue) {
+
+		repaint();
+		JPanel SettingsPanel = new JPanel(){
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+
+				ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "setting_background.png")));
+				g.drawImage(img.getImage(), 0, 0, null);
+			}
+		};
+
+		contentPane.add(SettingsPanel, "settings");
+		SettingsPanel.setLayout(new BorderLayout(0, 0));
+
+		JPanel SettingsTitle = new JPanel();
+		SettingsTitle.setOpaque(false);
+		SettingsPanel.add(SettingsTitle, BorderLayout.NORTH);
+		SettingsTitle.setLayout(new BoxLayout(SettingsTitle, BoxLayout.Y_AXIS));
+
+		JLabel lblSettings = new JLabel("Settings");
+		lblSettings.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSettings.setFont(new Font("Segoe UI", Font.PLAIN, 90));
+		lblSettings.setAlignmentX(0.5f);
+		SettingsTitle.add(lblSettings);
+
+		// Add sound_close and sound_open buttons
+		JPanel sound_panel = new JPanel();
+		sound_panel.setLayout(null);
+		sound_panel.setOpaque(false);
+		SettingsPanel.add(sound_panel);
+		if (isplaying == true) {
+
+			JButton sound_close = new JButton();
+
+			sound_close.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "sound_close.jpg"))));
+			sound_close.setBounds(450, 200, 200, 200);
+			sound_panel.add(sound_close, BorderLayout.CENTER);
+
+			sound_close.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					AudioPlayer.player.stop(loop);
+					isplaying = false;
+					//sound_panel.remove(sound_close);
+					settingPage(btnContinue);
+
+					cl.show(contentPane, "settings");
+				}
+			});
+
+
+		} else if (isplaying == false) {
+			JButton sound_open = new JButton();
+
+			sound_open.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "sound_open.jpg"))));
+			sound_open.setBounds(450, 200, 200, 200);
+			sound_panel.add(sound_open, BorderLayout.CENTER);
+
+			sound_open.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					AudioPlayer.player.start(loop);
+					isplaying = true;
+					settingPage(btnContinue);
+
+					cl.show(contentPane, "settings");
+				}
+			});
+
+		}
+
+
+		JPanel SettingsButtons = new JPanel();
+		SettingsButtons.setOpaque(false);
+		SettingsPanel.add(SettingsButtons, BorderLayout.SOUTH);
+		SettingsButtons.setLayout(new BoxLayout(SettingsButtons, BoxLayout.Y_AXIS));
+
+		JButton btnSettingsBackToMain = new JButton("Back to Main Menu");
+		btnSettingsBackToMain.setMinimumSize(new Dimension(300, 50));
+		btnSettingsBackToMain.setMaximumSize(new Dimension(300, 50));
+		btnSettingsBackToMain.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				resetGame();
+				if (hasContinue) {
+					btnContinue.setEnabled(false);
+					hasContinue = false;
+				}
+				cl.show(contentPane, "mainmenu");
+			}
+		});
+		btnSettingsBackToMain.setPreferredSize(new Dimension(300, 50));
+		btnSettingsBackToMain.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		btnSettingsBackToMain.setAlignmentX(0.5f);
+		SettingsButtons.add(btnSettingsBackToMain);
+	}
+
+	public void levelSelect(Difficulty difficulty) {
+		SelectLevelButtons.add(Box.createHorizontalGlue());
+		for (int i = 0; i < Settings.MAX_LEVELS; i++) {
+			int level_i = i + 1;
+			JButton button_1 = new JButton(Integer.toString(level_i));
+			button_1.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+			button_1.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					newGame(difficulty, level_i);
+					cl.show(contentPane, "game");
+				}
+			});
+			SelectLevelButtons.add(button_1);
+			
+			if (i != Settings.MAX_LEVELS - 1) {
+				SelectLevelButtons.add(Box.createHorizontalStrut(20));
+			}
+		}
+		SelectLevelButtons.add(Box.createHorizontalGlue());
 	}
 	
 	public void newGame(Difficulty difficulty, int level) {
 		resetGame();
 		updateDifficulty(difficulty);
+		updateLevel(level);
+		updateHighScore();
 		board = BoardIO.loadBoardFromFile(Settings.PATH_PUZZLES + difficulty.name().toLowerCase() + Integer.toString(level) + ".txt");
         CarCreate car = new CarCreate(board);
         car.createCarList();
@@ -576,103 +781,10 @@ public class GameFrame extends JFrame {
             MoveComponent c = moveList.get(i);
             c.setCarList(carList);
         }
-	}
-	
-	public void settingPage() {
-		repaint();
-		JPanel SettingsPanel = new JPanel() {
-			public void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				
-				ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "setting_background.png")));
-				g.drawImage(img.getImage(), 0, 0, null);
-			}
-		};
-		//SettingsPanel.setOpaque(false);
-		SettingsPanel.setLayout(new BorderLayout(0, 0));
-
-		contentPane.add(SettingsPanel, "settings");
-		
-		JPanel SettingsTitle = new JPanel();
-		SettingsPanel.add(SettingsTitle, BorderLayout.NORTH);
-		//SettingsTitle.setLayout(new BoxLayout(SettingsTitle, BoxLayout.Y_AXIS));
-		SettingsTitle.setOpaque(false);
-		
-		JLabel lblSettings = new JLabel("Settings");
-		lblSettings.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSettings.setFont(new Font("Segoe UI", Font.PLAIN, 90));
-		lblSettings.setAlignmentX(0.5f);
-		SettingsTitle.add(lblSettings);
-		
-		JPanel sound_panel = new JPanel();
-		sound_panel.setLayout(null);
-		sound_panel.setOpaque(false);
-		SettingsPanel.add(sound_panel);
-		if (isplaying == true) {
-			
-			JButton sound_close = new JButton();
-			
-			sound_close.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "sound_close.jpg"))));
-			sound_close.setBounds(450, 200, 200, 200);
-			sound_panel.add(sound_close, BorderLayout.CENTER);
-			
-			//sound_close.setBounds(550, 500, 600, 600);
-			sound_close.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					AudioPlayer.player.stop(loop);
-					isplaying = false;
-					//sound_panel.remove(sound_close);
-					settingPage();
-					//sound_panel.remove(sound_close);
-					
-					cl.show(contentPane, "settings");
-				}
-			});
-			
-		
-		} else if (isplaying == false) {
-			JButton sound_open = new JButton();
-			
-			sound_open.setIcon(new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "sound_open.jpg"))));
-			sound_open.setBounds(450, 200, 200, 200);
-			sound_panel.add(sound_open, BorderLayout.CENTER);
-			
-			//sound_close.setBounds(550, 500, 600, 600);
-			sound_open.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					AudioPlayer.player.start(loop);
-					isplaying = true;
-					settingPage();
-					
-					cl.show(contentPane, "settings");
-				}
-			});
-			
-		}
-		
-		
-
-		
-		JPanel SettingsButtons = new JPanel();
-		SettingsPanel.add(SettingsButtons, BorderLayout.SOUTH);
-		//SettingsButtons.setLayout(new BoxLayout(SettingsButtons, BoxLayout.Y_AXIS));
-		SettingsButtons.setOpaque(false);
-		
-		JButton btnSettingsBackToMain = new JButton("Back to Main Menu");
-		btnSettingsBackToMain.setMinimumSize(new Dimension(300, 50));
-		btnSettingsBackToMain.setMaximumSize(new Dimension(300, 50));
-		btnSettingsBackToMain.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				cl.show(contentPane, "mainmenu");
-			}
-		});
-		
-		btnSettingsBackToMain.setPreferredSize(new Dimension(300, 50));
-		btnSettingsBackToMain.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		btnSettingsBackToMain.setAlignmentX(0.5f);
-		SettingsButtons.add(btnSettingsBackToMain);
+        
+        if (highScore.size() > 0) {
+        	lblHighscorescore.setText(Integer.toString(highScore.get(0).getScore()));
+        }
 	}
 	
 	public void updateMoves(int moves) {
@@ -696,19 +808,54 @@ public class GameFrame extends JFrame {
 		else if (difficulty == Difficulty.HARD) {
 			lblDifficultyscore.setText("Hard");
 		}
-		
+	}
+	
+	public void updateLevel(int level) {
+		this.setLevel(level);
+		lblLevellevel.setText(Integer.toString(level));
+	}
+	
+	public void updateHighScore() {
+		highScore = BoardIO.loadHighScoreFromFile(Settings.PATH_PUZZLES + Settings.PATH_HIGHSCORE_FILE, difficulty, level);
 	}
 	
 	public void gameOver() {
 		cl.show(contentPane, "gameover");
-		lblYourScore.setText(Integer.toString(this.moves));
-		lblBestScore.setText(Integer.toString(this.moves));
-		resetGame();
+		lblYourScore.setText("Your score: " + moves); 
+		cl_gameover.show(GameOverScoreInfo, "entername");
 	}
 	
 	public void resetGame() {
 		GameBoard.removeAll();
+		GameOverHighScore.removeAll();
+		SelectLevelButtons.removeAll();
+		txtEnterYourName.setText("");
 		resetMoves();
+	}
+	
+	public void showHighScore() {
+		String playerName = txtEnterYourName.getText();
+		BoardIO.printHighScoreToFile(Settings.PATH_PUZZLES + Settings.PATH_HIGHSCORE_FILE, difficulty, level, moves, playerName);
+		updateHighScore();
+		
+		if (highScore.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				JLabel score = new JLabel(Integer.toString(i + 1) + ". " + highScore.get(i).getPlayerName() + " " + Integer.toString(highScore.get(i).getScore()));
+				score.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+				score.setAlignmentX(Component.CENTER_ALIGNMENT);
+				GameOverHighScore.add(score);
+			}
+		}
+		else {
+			for (int i = 0; i < highScore.size(); i++) {
+				JLabel score = new JLabel(Integer.toString(i + 1) + ". " + highScore.get(i).getPlayerName() + " " + Integer.toString(highScore.get(i).getScore()));
+				score.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+				score.setAlignmentX(Component.CENTER_ALIGNMENT);
+				GameOverHighScore.add(score);
+			}
+		}
+		
+		cl_gameover.show(GameOverScoreInfo, "highscore");
 	}
 
 	/**
@@ -724,26 +871,12 @@ public class GameFrame extends JFrame {
 	public void setDifficulty(Difficulty difficulty) {
 		this.difficulty = difficulty;
 	}
-	
-	public void ButtonSound() {
-		try {
-			AudioInputStream click_audio = AudioSystem.getAudioInputStream(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "button_click.wav"));
-			Clip clip = null;
-			try {
-				clip = AudioSystem.getClip();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-			clip.open(click_audio);
-			clip.start();
-		} catch (UnsupportedAudioFileException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		} catch (LineUnavailableException e1) {
-			e1.printStackTrace();
-		}
-		
+
+	public int getLevel() {
+		return level;
 	}
-	
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
 }
