@@ -3,6 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="3a100085-f8ba-45a4-81b1-204da7bc46f4" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/src/gui/GameFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/GameFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gui/images/board.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gui/images/menu_background.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gui/images/setting_background.png" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,8 +20,8 @@
       <file leaf-file-name="GameFrame.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/gui/GameFrame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="91">
-              <caret line="387" column="46" selection-start-line="387" selection-start-column="46" selection-end-line="387" selection-end-column="46" />
+            <state relative-caret-position="99">
+              <caret line="665" column="163" selection-start-line="665" selection-start-column="163" selection-end-line="665" selection-end-column="163" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1257#1551#0" expanded="true" />
@@ -29,6 +32,8 @@
                 <element signature="e#1896#1897#0" expanded="true" />
                 <element signature="e#4715#4862#0" expanded="true" />
                 <element signature="e#4861#4862#0" expanded="true" />
+                <element signature="e#6961#7263#0" expanded="true" />
+                <element signature="e#7262#7263#0" expanded="true" />
                 <element signature="e#22406#22704#0" expanded="true" />
                 <element signature="e#22703#22704#0" expanded="true" />
               </folding>
@@ -51,6 +56,11 @@
     <findStrings>
       <find>btnCon</find>
       <find>back</find>
+      <find>levelS</find>
+      <find>levelSe</find>
+      <find>levelselect</find>
+      <find>SelectlevelBu</find>
+      <find>levelse</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -209,12 +219,12 @@
       <option name="presentableId" value="Default" />
       <updated>1526467278854</updated>
       <workItem from="1526467280651" duration="679000" />
-      <workItem from="1526510493352" duration="3091000" />
+      <workItem from="1526510493352" duration="3888000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3770000" />
+    <option name="totallyTimeSpent" value="4567000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1513" height="973" extended-state="6" />
@@ -271,6 +281,8 @@
             <element signature="e#1896#1897#0" expanded="true" />
             <element signature="e#4715#4862#0" expanded="true" />
             <element signature="e#4861#4862#0" expanded="true" />
+            <element signature="e#6961#7263#0" expanded="true" />
+            <element signature="e#7262#7263#0" expanded="true" />
             <element signature="e#22406#22704#0" expanded="true" />
             <element signature="e#22703#22704#0" expanded="true" />
           </folding>
@@ -307,8 +319,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/gui/GameFrame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="91">
-          <caret line="387" column="46" selection-start-line="387" selection-start-column="46" selection-end-line="387" selection-end-column="46" />
+        <state relative-caret-position="99">
+          <caret line="665" column="163" selection-start-line="665" selection-start-column="163" selection-end-line="665" selection-end-column="163" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1257#1551#0" expanded="true" />
@@ -319,6 +331,8 @@
             <element signature="e#1896#1897#0" expanded="true" />
             <element signature="e#4715#4862#0" expanded="true" />
             <element signature="e#4861#4862#0" expanded="true" />
+            <element signature="e#6961#7263#0" expanded="true" />
+            <element signature="e#7262#7263#0" expanded="true" />
             <element signature="e#22406#22704#0" expanded="true" />
             <element signature="e#22703#22704#0" expanded="true" />
           </folding>

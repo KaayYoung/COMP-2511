@@ -218,7 +218,14 @@ public class GameFrame extends JFrame {
 		MainMenuButtons.add(btnQuit);
 		btnQuit.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		JPanel SelectLevelPanel = new JPanel();
+		JPanel SelectLevelPanel = new JPanel() {
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+
+				ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "difficulty_background.jpg")));
+				g.drawImage(img.getImage(), 0, 0, null);
+			}
+		};
 		contentPane.add(SelectLevelPanel, "levelselect");
 		SelectLevelPanel.setLayout(new BorderLayout(0, 0));
 
@@ -311,6 +318,8 @@ public class GameFrame extends JFrame {
 		DifficultyButtons.setLayout(new BoxLayout(DifficultyButtons, BoxLayout.PAGE_AXIS));
 
 		DifficultyButtons.add(Box.createVerticalGlue());
+
+		SelectLevelButtons.setOpaque(false);
 
 		JButton btnEasy = new JButton("Easy");
 		btnEasy.addMouseListener(new MouseAdapter() {
@@ -654,7 +663,7 @@ public class GameFrame extends JFrame {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 
-				ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "setting_background.png")));
+				ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "setting_background.jpg")));
 				g.drawImage(img.getImage(), 0, 0, null);
 			}
 		};
