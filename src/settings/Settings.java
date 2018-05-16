@@ -1,6 +1,12 @@
 package settings;
 
 public class Settings {
+	public static enum Difficulty {
+		EASY,
+		MEDIUM,
+		HARD
+	}
+	
 	public static final int BOARD_SIZE = 6;
 	public static final int MAX_CARS = 11;
 	public static final int RED_CAR_ID = 1;
@@ -15,4 +21,6 @@ public class Settings {
     public static final int UI_BLOCK_SIZE = 91;
     public static final String PATH_UI_IMAGES = "gui/images/";
 	public static final String PATH_PUZZLES = "puzzles/";
+	public static final String PATH_HIGHSCORE_FILE = "highscore.txt";
+	public static final int MAX_LEVELS = 7;
 }

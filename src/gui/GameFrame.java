@@ -7,11 +7,13 @@ import javax.swing.border.EmptyBorder;
 
 import gridlock.Board;
 import gridlock.BoardIO;
+import gridlock.Player;
 import search.Heuristic;
 import search.HeuristicCarsInfront;
 import search.SearchAlgorithm;
 import search.SearchAlgorithmAStar;
 import settings.Settings;
+import settings.Settings.Difficulty;
 
 import javax.swing.JButton;
 
@@ -26,7 +28,11 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.awt.CardLayout;
 
 import javax.swing.JLayeredPane;
@@ -34,19 +40,24 @@ import java.awt.Rectangle;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
+import java.awt.GridLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class GameFrame extends JFrame {
 	private static final long serialVersionUID = -5739699646629372557L;
 	
-	private enum Difficulty {
-		EASY,
-		MEDIUM,
-		HARD
-	}
 	private JPanel contentPane;
+	private JPanel GameOverScoreInfo;
 	private Difficulty difficulty = Difficulty.EASY;
+	private int level = 0;
 	
 	CardLayout cl = new CardLayout();
+	CardLayout cl_gameover = new CardLayout();
 	JPanel MainMenuPanel = new JPanel();
 	JPanel DifficultyPanel = new JPanel();
 	JPanel GamePanel = new JPanel();
@@ -56,13 +67,18 @@ public class GameFrame extends JFrame {
 	JLabel lblHighscorescore;
 	JLabel lblDifficultyscore;
 	JLabel lblYourScore;
-	JLabel lblBestScore;
+	JLabel lblLevellevel;
+	JPanel GameOverHighScore;
+	JPanel SelectLevelButtons;
 	
 	private static ArrayList<JLabel> carList = new ArrayList<JLabel>();
 	private static ArrayList<MoveComponent> moveList = new ArrayList<MoveComponent>();
 	private int moves = 0;
 	private boolean hasContinue = false;
 	private Board board;
+	private JTextField txtEnterYourName;
+	
+	private List<Player> highScore;
 
 	/**
 	 * Create the frame.
@@ -165,6 +181,66 @@ public class GameFrame extends JFrame {
 		MainMenuButtons.add(btnQuit);
 		btnQuit.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
+		JPanel SelectLevelPanel = new JPanel();
+		contentPane.add(SelectLevelPanel, "levelselect");
+		SelectLevelPanel.setLayout(new BorderLayout(0, 0));
+		
+		JPanel SelectLevelTitle = new JPanel();
+		SelectLevelPanel.add(SelectLevelTitle, BorderLayout.NORTH);
+		SelectLevelTitle.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JLabel lblSelectLevel = new JLabel("Select Level");
+		lblSelectLevel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSelectLevel.setFont(new Font("Segoe UI", Font.PLAIN, 90));
+		lblSelectLevel.setAlignmentX(0.5f);
+		SelectLevelTitle.add(lblSelectLevel);
+		
+		JPanel SelectLevelBackButtons = new JPanel();
+		SelectLevelPanel.add(SelectLevelBackButtons, BorderLayout.SOUTH);
+		SelectLevelBackButtons.setLayout(new BoxLayout(SelectLevelBackButtons, BoxLayout.X_AXIS));
+		
+		Component horizontalGlue = Box.createHorizontalGlue();
+		SelectLevelBackButtons.add(horizontalGlue);
+		
+		JButton btnBackToDifficulty = new JButton("Back to Difficulty");
+		btnBackToDifficulty.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				SelectLevelButtons.removeAll();
+				cl.show(contentPane, "difficulty");
+			}
+		});
+		btnBackToDifficulty.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		btnBackToDifficulty.setPreferredSize(new Dimension(300, 50));
+		btnBackToDifficulty.setMinimumSize(new Dimension(300, 50));
+		btnBackToDifficulty.setMaximumSize(new Dimension(300, 50));
+		SelectLevelBackButtons.add(btnBackToDifficulty);
+		
+		Component horizontalStrut = Box.createHorizontalStrut(50);
+		SelectLevelBackButtons.add(horizontalStrut);
+		
+		JButton button = new JButton("Back to Main Menu");
+		button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				SelectLevelButtons.removeAll();
+				cl.show(contentPane, "mainmenu");
+			}
+		});
+		button.setPreferredSize(new Dimension(300, 50));
+		button.setMinimumSize(new Dimension(300, 50));
+		button.setMaximumSize(new Dimension(300, 50));
+		button.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		button.setAlignmentX(0.5f);
+		SelectLevelBackButtons.add(button);
+		
+		Component horizontalGlue_1 = Box.createHorizontalGlue();
+		SelectLevelBackButtons.add(horizontalGlue_1);
+		
+		SelectLevelButtons = new JPanel();
+		SelectLevelPanel.add(SelectLevelButtons, BorderLayout.CENTER);
+		SelectLevelButtons.setLayout(new BoxLayout(SelectLevelButtons, BoxLayout.X_AXIS));
+		
 		contentPane.add(DifficultyPanel, "difficulty");
 		DifficultyPanel.setLayout(new BorderLayout(0, 0));
 		
@@ -196,8 +272,8 @@ public class GameFrame extends JFrame {
 		btnEasy.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				newGame(Difficulty.EASY, 7);
-				cl.show(contentPane, "game");
+				levelSelect(Difficulty.EASY);
+				cl.show(contentPane, "levelselect");
 			}
 		});
 		btnEasy.setFont(new Font("Segoe UI", Font.PLAIN, 30));
@@ -213,8 +289,8 @@ public class GameFrame extends JFrame {
 		btnMedium.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				newGame(Difficulty.MEDIUM, 7);
-				cl.show(contentPane, "game");
+				levelSelect(Difficulty.MEDIUM);
+				cl.show(contentPane, "levelselect");
 			}
 		});
 		btnMedium.setFont(new Font("Segoe UI", Font.PLAIN, 30));
@@ -230,8 +306,8 @@ public class GameFrame extends JFrame {
 		btnHard.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				newGame(Difficulty.HARD, 7);
-				cl.show(contentPane, "game");
+				levelSelect(Difficulty.HARD);
+				cl.show(contentPane, "levelselect");
 			}
 		});
 		btnHard.setFont(new Font("Segoe UI", Font.PLAIN, 30));
@@ -292,6 +368,9 @@ public class GameFrame extends JFrame {
 		JLabel lblDifficulty = new JLabel("Difficulty: ");
 		GameScoreLabels.add(lblDifficulty);
 		
+		JLabel lblLevel = new JLabel("Level");
+		GameScoreLabels.add(lblLevel);
+		
 		JLabel lblMoves = new JLabel("Moves: ");
 		GameScoreLabels.add(lblMoves);
 		
@@ -305,6 +384,10 @@ public class GameFrame extends JFrame {
 		lblDifficultyscore = new JLabel("Easy");
 		lblDifficultyscore.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		GameScore.add(lblDifficultyscore);
+		
+		lblLevellevel = new JLabel("0");
+		lblLevellevel.setAlignmentX(1.0f);
+		GameScore.add(lblLevellevel);
 		
 		lblMovesscore = new JLabel("0");
 		lblMovesscore.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -404,35 +487,62 @@ public class GameFrame extends JFrame {
 		
 		GameOverScore.add(Box.createVerticalStrut(50));
 		
-		JPanel GameOverScoreInfo = new JPanel();
+		GameOverScoreInfo = new JPanel();
 		GameOverScore.add(GameOverScoreInfo);
-		GameOverScoreInfo.setLayout(new BoxLayout(GameOverScoreInfo, BoxLayout.X_AXIS));
+		GameOverScoreInfo.setLayout(cl_gameover);
 		
-		JPanel ScoreText = new JPanel();
-		GameOverScoreInfo.add(ScoreText);
-		ScoreText.setLayout(new BoxLayout(ScoreText, BoxLayout.Y_AXIS));
+		JPanel GameOverEnterName = new JPanel();
+		GameOverEnterName.setPreferredSize(new Dimension(600, 300));
+		GameOverEnterName.setMaximumSize(new Dimension(32767, 300));
+		GameOverScoreInfo.add(GameOverEnterName, "entername");
+		GameOverEnterName.setLayout(new BoxLayout(GameOverEnterName, BoxLayout.Y_AXIS));
 		
-		JLabel lblYourMoves = new JLabel("Your moves: ");
-		lblYourMoves.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		ScoreText.add(lblYourMoves);
-		lblYourMoves.setAlignmentX(Component.CENTER_ALIGNMENT);
+		JPanel YourScore = new JPanel();
+		GameOverEnterName.add(YourScore);
 		
-		JLabel lblBestMoves = new JLabel("Best moves:");
-		lblBestMoves.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		ScoreText.add(lblBestMoves);
-		lblBestMoves.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
-		JPanel ScoreInfo = new JPanel();
-		GameOverScoreInfo.add(ScoreInfo);
-		ScoreInfo.setLayout(new BoxLayout(ScoreInfo, BoxLayout.Y_AXIS));
-		
-		lblYourScore = new JLabel("Your Score");
+		lblYourScore = new JLabel("Your score: 0");
 		lblYourScore.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		ScoreInfo.add(lblYourScore);
+		YourScore.add(lblYourScore);
 		
-		lblBestScore = new JLabel("Best Score");
-		lblBestScore.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-		ScoreInfo.add(lblBestScore);
+		JPanel EnterName = new JPanel();
+		GameOverEnterName.add(EnterName);
+		
+		JLabel lblYourName = new JLabel("Your name: ");
+		EnterName.add(lblYourName);
+		lblYourName.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+		
+		JLabel label = new JLabel("");
+		EnterName.add(label);
+		
+		JLabel label_1 = new JLabel("");
+		EnterName.add(label_1);
+		
+		txtEnterYourName = new JTextField();
+		txtEnterYourName.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					showHighScore();
+				}
+			}
+		});
+		EnterName.add(txtEnterYourName);
+		txtEnterYourName.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+		txtEnterYourName.setColumns(10);
+		
+		JButton btnSubmit = new JButton("Submit");
+		btnSubmit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				showHighScore();
+			}
+		});
+		EnterName.add(btnSubmit);
+		btnSubmit.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+		
+		GameOverHighScore = new JPanel();
+		GameOverScoreInfo.add(GameOverHighScore, "highscore");
+		GameOverHighScore.setLayout(new BoxLayout(GameOverHighScore, BoxLayout.Y_AXIS));
 		
 		Component verticalStrut = Box.createVerticalStrut(25);
 		GameOverScore.add(verticalStrut);
@@ -492,8 +602,14 @@ public class GameFrame extends JFrame {
 		JButton btnSettingsBackToMain = new JButton("Back to Main Menu");
 		btnSettingsBackToMain.setMinimumSize(new Dimension(300, 50));
 		btnSettingsBackToMain.setMaximumSize(new Dimension(300, 50));
-		btnSettingsBackToMain.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		btnSettingsBackToMain.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				resetGame();
+				if (hasContinue) {
+					btnContinue.setEnabled(false);
+					hasContinue = false;
+				}
 				cl.show(contentPane, "mainmenu");
 			}
 		});
@@ -503,9 +619,33 @@ public class GameFrame extends JFrame {
 		SettingsButtons.add(btnSettingsBackToMain);
 	}
 	
+	public void levelSelect(Difficulty difficulty) {
+		SelectLevelButtons.add(Box.createHorizontalGlue());
+		for (int i = 0; i < Settings.MAX_LEVELS; i++) {
+			int level_i = i + 1;
+			JButton button_1 = new JButton(Integer.toString(level_i));
+			button_1.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+			button_1.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					newGame(difficulty, level_i);
+					cl.show(contentPane, "game");
+				}
+			});
+			SelectLevelButtons.add(button_1);
+			
+			if (i != Settings.MAX_LEVELS - 1) {
+				SelectLevelButtons.add(Box.createHorizontalStrut(20));
+			}
+		}
+		SelectLevelButtons.add(Box.createHorizontalGlue());
+	}
+	
 	public void newGame(Difficulty difficulty, int level) {
 		resetGame();
 		updateDifficulty(difficulty);
+		updateLevel(level);
+		updateHighScore();
 		board = BoardIO.loadBoardFromFile(Settings.PATH_PUZZLES + difficulty.name().toLowerCase() + Integer.toString(level) + ".txt");
         CarCreate car = new CarCreate(board);
         car.createCarList();
@@ -520,6 +660,10 @@ public class GameFrame extends JFrame {
         for(int i = 0; i < moveList.size(); i++) {
             MoveComponent c = moveList.get(i);
             c.setCarList(carList);
+        }
+        
+        if (highScore.size() > 0) {
+        	lblHighscorescore.setText(Integer.toString(highScore.get(0).getScore()));
         }
 	}
 	
@@ -544,19 +688,54 @@ public class GameFrame extends JFrame {
 		else if (difficulty == Difficulty.HARD) {
 			lblDifficultyscore.setText("Hard");
 		}
-		
+	}
+	
+	public void updateLevel(int level) {
+		this.setLevel(level);
+		lblLevellevel.setText(Integer.toString(level));
+	}
+	
+	public void updateHighScore() {
+		highScore = BoardIO.loadHighScoreFromFile(Settings.PATH_PUZZLES + Settings.PATH_HIGHSCORE_FILE, difficulty, level);
 	}
 	
 	public void gameOver() {
 		cl.show(contentPane, "gameover");
-		lblYourScore.setText(Integer.toString(this.moves));
-		lblBestScore.setText(Integer.toString(this.moves));
-		resetGame();
+		lblYourScore.setText("Your score: " + moves); 
+		cl_gameover.show(GameOverScoreInfo, "entername");
 	}
 	
 	public void resetGame() {
 		GameBoard.removeAll();
+		GameOverHighScore.removeAll();
+		SelectLevelButtons.removeAll();
+		txtEnterYourName.setText("");
 		resetMoves();
+	}
+	
+	public void showHighScore() {
+		String playerName = txtEnterYourName.getText();
+		BoardIO.printHighScoreToFile(Settings.PATH_PUZZLES + Settings.PATH_HIGHSCORE_FILE, difficulty, level, moves, playerName);
+		updateHighScore();
+		
+		if (highScore.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				JLabel score = new JLabel(Integer.toString(i + 1) + ". " + highScore.get(i).getPlayerName() + " " + Integer.toString(highScore.get(i).getScore()));
+				score.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+				score.setAlignmentX(Component.CENTER_ALIGNMENT);
+				GameOverHighScore.add(score);
+			}
+		}
+		else {
+			for (int i = 0; i < highScore.size(); i++) {
+				JLabel score = new JLabel(Integer.toString(i + 1) + ". " + highScore.get(i).getPlayerName() + " " + Integer.toString(highScore.get(i).getScore()));
+				score.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+				score.setAlignmentX(Component.CENTER_ALIGNMENT);
+				GameOverHighScore.add(score);
+			}
+		}
+		
+		cl_gameover.show(GameOverScoreInfo, "highscore");
 	}
 
 	/**
@@ -571,5 +750,13 @@ public class GameFrame extends JFrame {
 	 */
 	public void setDifficulty(Difficulty difficulty) {
 		this.difficulty = difficulty;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 }
