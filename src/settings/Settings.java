@@ -16,8 +16,8 @@ public class Settings {
 	public static final int CAR_MAX_LENGTH = 3;
 	public static final int MOVEMENT_COST = 1; 	// Each car's move counts as 1
 	public static final int HASHCODE_PRIME = 31;
-    public static final int UI_FRAME_WIDTH = 800;
-    public static final int UI_FRAME_HEIGHT = 600;
+    public static final int UI_FRAME_WIDTH = 1100;
+    public static final int UI_FRAME_HEIGHT = 700;
     public static final int UI_BLOCK_SIZE = 91;
     public static final String PATH_UI_IMAGES = "gui/images/";
 	public static final String PATH_PUZZLES = "puzzles/";
