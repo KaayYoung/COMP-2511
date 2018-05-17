@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3a100085-f8ba-45a4-81b1-204da7bc46f4" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/src/gui/GameFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/GameFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gui/images/board.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gui/images/menu_background.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gui/images/setting_background.png" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,8 +17,8 @@
       <file leaf-file-name="GameFrame.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/gui/GameFrame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="99">
-              <caret line="665" column="163" selection-start-line="665" selection-start-column="163" selection-end-line="665" selection-end-column="163" />
+            <state relative-caret-position="330">
+              <caret line="63" column="144" selection-start-line="63" selection-start-column="144" selection-end-line="63" selection-end-column="144" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1257#1551#0" expanded="true" />
@@ -219,12 +216,12 @@
       <option name="presentableId" value="Default" />
       <updated>1526467278854</updated>
       <workItem from="1526467280651" duration="679000" />
-      <workItem from="1526510493352" duration="3888000" />
+      <workItem from="1526510493352" duration="4621000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4567000" />
+    <option name="totallyTimeSpent" value="5300000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1513" height="973" extended-state="6" />
@@ -319,8 +316,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/gui/GameFrame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="99">
-          <caret line="665" column="163" selection-start-line="665" selection-start-column="163" selection-end-line="665" selection-end-column="163" />
+        <state relative-caret-position="330">
+          <caret line="63" column="144" selection-start-line="63" selection-start-column="144" selection-end-line="63" selection-end-column="144" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1257#1551#0" expanded="true" />

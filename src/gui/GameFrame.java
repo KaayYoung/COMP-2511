@@ -61,7 +61,7 @@ public class GameFrame extends JFrame {
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 
-			ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "board_background.jpg")));
+			ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "setting_background.jpg")));
 			g.drawImage(img.getImage(), 0, 0, null);
 		}
 	};
