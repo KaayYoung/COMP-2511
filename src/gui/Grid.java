@@ -69,9 +69,11 @@ public class Grid extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
-        for ( int x = 0; x <= Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE; x += Settings.UI_BLOCK_SIZE)
-        	for ( int y = 0; y <= Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE; y += Settings.UI_BLOCK_SIZE)
+        for ( int x = 0; x <= Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE; x += Settings.UI_BLOCK_SIZE) {
+        	for ( int y = 0; y <= Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE; y += Settings.UI_BLOCK_SIZE) {
         		g.drawRect( x, y, Settings.UI_BLOCK_SIZE, Settings.UI_BLOCK_SIZE);
+        	}
+        }
         g2d.dispose();
     }
 

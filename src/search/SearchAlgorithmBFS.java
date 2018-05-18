@@ -63,7 +63,7 @@ public class SearchAlgorithmBFS extends SearchAlgorithm {
 		return shortestSolution;
 	}
 	
-	public List<Board> getShortestSolution(List<List<Board>> solutions){
+	private List<Board> getShortestSolution(List<List<Board>> solutions){
 		List<Board> shortestSolution = new ArrayList<Board>();
 		if (solutions.size() != 0) {
 			shortestSolution = solutions.get(0);

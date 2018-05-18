@@ -394,20 +394,27 @@ public class GameFrame extends JFrame {
 		JLayeredPane GameBoardLayeredPane = new JLayeredPane();
 
 		GamePanel.add(GameBoardLayeredPane);
-		GameBoard.setBounds(200, 110, 547, 551);
 		GameBoardLayeredPane.setLayer(GameBoard, 1);
-		GameBoardLayeredPane.add(GameBoard);
-
-		GameBoard.setPreferredSize(new Dimension(Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE));
-		GameBoard.setMinimumSize(new Dimension(Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE));
-		GameBoard.setMaximumSize(new Dimension(Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE));
-		GameBoard.setLayout(null);
-		GameBoard.setOpaque(false);
+				GameBoard.setBounds(200, 110, 547, 551);
+				GameBoardLayeredPane.add(GameBoard);
+		
+				GameBoard.setPreferredSize(new Dimension(Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE));
+				GameBoard.setMinimumSize(new Dimension(Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE));
+				GameBoard.setMaximumSize(new Dimension(Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE));
+				GameBoard.setLayout(null);
+				GameBoard.setOpaque(false);
 
 		Grid Grid = new Grid();
 		Grid.setBounds(new Rectangle(200, 110, 547, 547));
 		GameBoardLayeredPane.setLayer(Grid, 0);
 		GameBoardLayeredPane.add(Grid);
+		Grid.setLayout(null);
+		
+		JLabel lblExit = new JLabel("EXIT");
+		lblExit.setHorizontalAlignment(SwingConstants.CENTER);
+		lblExit.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+		lblExit.setBounds(458, 209, 88, 37);
+		Grid.add(lblExit);
 
 		JPanel GameButtons = new JPanel();
 		GameButtons.setOpaque(false);
@@ -911,23 +918,24 @@ public class GameFrame extends JFrame {
 	}
 
 	public void ButtonSound() {
-		try {
-			AudioInputStream click_audio = AudioSystem.getAudioInputStream(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "button_click.wav"));
-			Clip clip = null;
+		if(isplaying) {
 			try {
-				clip = AudioSystem.getClip();
-			} catch (Exception e1) {
+				AudioInputStream click_audio = AudioSystem.getAudioInputStream(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "button_click.wav"));
+				Clip clip = null;
+				try {
+					clip = AudioSystem.getClip();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				clip.open(click_audio);
+				clip.start();
+			} catch (UnsupportedAudioFileException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			} catch (LineUnavailableException e1) {
 				e1.printStackTrace();
 			}
-			clip.open(click_audio);
-			clip.start();
-		} catch (UnsupportedAudioFileException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		} catch (LineUnavailableException e1) {
-			e1.printStackTrace();
 		}
-
 	}
 }
