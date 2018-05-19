@@ -520,7 +520,21 @@ public class GameFrame extends JFrame {
 		JPanel GameNavigationButtons = new JPanel();
 		GameNavigationButtons.setOpaque(false);
 		GameButtons.add(GameNavigationButtons, BorderLayout.SOUTH);
-		GameNavigationButtons.setLayout(new BoxLayout(GameNavigationButtons, BoxLayout.X_AXIS));
+		GameNavigationButtons.setLayout(new BoxLayout(GameNavigationButtons, BoxLayout.Y_AXIS));
+		
+		JButton btnRestart = new JButton("Restart");
+		btnRestart.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Restart();
+			}
+		});
+		btnRestart.setPreferredSize(new Dimension(150, 50));
+		btnRestart.setMinimumSize(new Dimension(150, 50));
+		btnRestart.setMaximumSize(new Dimension(150, 50));
+		btnRestart.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		btnRestart.setAlignmentX(Component.CENTER_ALIGNMENT);
+		GameNavigationButtons.add(btnRestart);
 
 		JButton btnGameBackToMain = new JButton("Main Menu");
 		btnGameBackToMain.setMaximumSize(new Dimension(150, 50));
@@ -822,6 +836,35 @@ public class GameFrame extends JFrame {
         else {
         	lblHighscorescore.setText("0");
         }
+	}
+	
+	public void Restart() {
+		cl.show(contentPane, "hintloading");
+		resetGame();
+		
+		board = BoardIO.loadBoardFromFile(Settings.PATH_PUZZLES + difficulty.name().toLowerCase() + Integer.toString(level) + ".txt");
+        CarCreate car = new CarCreate(board);
+        car.createCarList();
+        carList = car.getCarList();
+        moveList = car.getMoveList();
+        
+        for(int i = 0; i < carList.size(); i++) {
+            JLabel c = carList.get(i);
+            GameBoard.add(c);
+        }
+
+        for(int i = 0; i < moveList.size(); i++) {
+            MoveComponent c = moveList.get(i);
+            c.setCarList(carList);
+        }
+        
+        if (highScore.size() > 0) {
+        	lblHighscorescore.setText(Integer.toString(highScore.get(0).getScore()));
+        }
+        else {
+        	lblHighscorescore.setText("0");
+        }
+        cl.show(contentPane, "game");
 	}
 	
 	public void updateMoves(int moves) {
