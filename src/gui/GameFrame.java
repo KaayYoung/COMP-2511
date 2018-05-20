@@ -434,19 +434,19 @@ public class GameFrame extends JFrame {
 		GameScoreLabels.setLayout(new BoxLayout(GameScoreLabels, BoxLayout.Y_AXIS));
 
 		JLabel lblDifficulty = new JLabel("Difficulty: ");
-		lblDifficulty.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		lblDifficulty.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		GameScoreLabels.add(lblDifficulty);
 
 		JLabel lblLevel = new JLabel("Level:");
-		lblLevel.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		lblLevel.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		GameScoreLabels.add(lblLevel);
 
 		JLabel lblMoves = new JLabel("Moves: ");
-		lblMoves.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		lblMoves.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		GameScoreLabels.add(lblMoves);
 
 		JLabel lblHighscore = new JLabel("Highscore: ");
-		lblHighscore.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		lblHighscore.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		GameScoreLabels.add(lblHighscore);
 
 		JPanel GameScore = new JPanel();
@@ -455,22 +455,22 @@ public class GameFrame extends JFrame {
 		GameScore.setLayout(new BoxLayout(GameScore, BoxLayout.Y_AXIS));
 
 		lblDifficultyscore = new JLabel("Easy");
-		lblDifficultyscore.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		lblDifficultyscore.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		lblDifficultyscore.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		GameScore.add(lblDifficultyscore);
 
 		lblLevellevel = new JLabel("0");
-		lblLevellevel.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		lblLevellevel.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		lblLevellevel.setAlignmentX(1.0f);
 		GameScore.add(lblLevellevel);
 
 		lblMovesscore = new JLabel("0");
-		lblMovesscore.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		lblMovesscore.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		lblMovesscore.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		GameScore.add(lblMovesscore);
 
 		lblHighscorescore = new JLabel("0");
-		lblHighscorescore.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		lblHighscorescore.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		lblHighscorescore.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		GameScore.add(lblHighscorescore);
 
@@ -973,11 +973,14 @@ public class GameFrame extends JFrame {
 				clip.open(click_audio);
 				clip.start();
 			} catch (UnsupportedAudioFileException e1) {
-				e1.printStackTrace();
+				AudioPlayer.player.stop(loop);
+				isplaying = false;
 			} catch (IOException e1) {
-				e1.printStackTrace();
+				AudioPlayer.player.stop(loop);
+				isplaying = false;
 			} catch (LineUnavailableException e1) {
-				e1.printStackTrace();
+				AudioPlayer.player.stop(loop);
+				isplaying = false;
 			}
 		}
 	}
