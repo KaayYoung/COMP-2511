@@ -395,14 +395,19 @@ public class GameFrame extends JFrame {
 
 		GamePanel.add(GameBoardLayeredPane);
 		GameBoardLayeredPane.setLayer(GameBoard, 1);
-				GameBoard.setBounds(200, 110, 547, 551);
-				GameBoardLayeredPane.add(GameBoard);
+		GameBoard.setBounds(200, 110, 547, 551);
+		GameBoardLayeredPane.add(GameBoard);
+
+		GameBoard.setPreferredSize(new Dimension(Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE));
+		GameBoard.setMinimumSize(new Dimension(Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE));
+		GameBoard.setMaximumSize(new Dimension(Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE));
+		GameBoard.setLayout(null);
+		GameBoard.setOpaque(false);
 		
-				GameBoard.setPreferredSize(new Dimension(Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE));
-				GameBoard.setMinimumSize(new Dimension(Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE));
-				GameBoard.setMaximumSize(new Dimension(Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE, Settings.UI_BLOCK_SIZE * Settings.BOARD_SIZE));
-				GameBoard.setLayout(null);
-				GameBoard.setOpaque(false);
+		JLabel lblHelp = new JLabel("Move the Red car towards the EXIT");
+		lblHelp.setBounds(200, 50, 500, 100);
+		lblHelp.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		GameBoardLayeredPane.add(lblHelp);
 
 		Grid Grid = new Grid();
 		Grid.setBounds(new Rectangle(200, 110, 547, 547));

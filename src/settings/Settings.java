@@ -19,7 +19,7 @@ public class Settings {
     public static final int UI_FRAME_WIDTH = 1100;
     public static final int UI_FRAME_HEIGHT = 700;
     public static final int UI_BLOCK_SIZE = 91;
-    public static final String PATH_UI_IMAGES = "gui/images/";
+    public static final String PATH_UI_IMAGES = "images/";
 	public static final String PATH_PUZZLES = "puzzles/";
 	public static final String PATH_HIGHSCORE_FILE = "highscore.txt";
 	public static final int MAX_LEVELS = 7;
