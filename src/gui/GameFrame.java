@@ -92,6 +92,8 @@ public class GameFrame extends JFrame {
 			s = new AudioStream(bgm);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}catch (NullPointerException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -102,10 +104,13 @@ public class GameFrame extends JFrame {
 			audioData = s.getData();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}catch (NullPointerException e) {
+			e.printStackTrace();
 		}
 	}
 
 	static ContinuousAudioDataStream loop = new ContinuousAudioDataStream(audioData);
+		
 	boolean isplaying = true;
 
 	/**
@@ -565,11 +570,19 @@ public class GameFrame extends JFrame {
 		contentPane.add(GameOverPanel, "gameover");
 		GameOverPanel.setLayout(new BorderLayout(0, 0));
 
-		JPanel GameOverTitle = new JPanel();
+		JPanel GameOverTitle = new JPanel() {
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+	
+				ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "an_1.gif")));
+				g.drawImage(img.getImage(), Settings.UI_FRAME_WIDTH/3 - 100, 0, this);
+			}
+		};
 		GameOverTitle.setOpaque(false);
 		GameOverPanel.add(GameOverTitle, BorderLayout.NORTH);
 
 		JLabel lblGameOver = new JLabel("Game Over");
+		lblGameOver.setOpaque(false);
 		lblGameOver.setFont(new Font("Segoe UI", Font.PLAIN, 90));
 		GameOverTitle.add(lblGameOver);
 
@@ -580,7 +593,15 @@ public class GameFrame extends JFrame {
 
 		GameOverScore.add(Box.createVerticalStrut(50));
 
-		JPanel GameOverCongrats = new JPanel();
+		JPanel GameOverCongrats = new JPanel(){
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+
+				ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "an_1.gif")));
+				//Image img = Toolkit.getDefaultToolkit().createImage(Settings.PATH_UI_IMAGES + "an_1.gif");
+				g.drawImage(img.getImage(), Settings.UI_FRAME_WIDTH/3 - 100, 0, this);
+			}
+		};
 		GameOverCongrats.setOpaque(false);
 		GameOverScore.add(GameOverCongrats);
 		GameOverCongrats.setLayout(new BoxLayout(GameOverCongrats, BoxLayout.X_AXIS));
@@ -603,7 +624,14 @@ public class GameFrame extends JFrame {
 		GameOverScoreInfo.add(GameOverEnterName, "entername");
 		GameOverEnterName.setLayout(new BoxLayout(GameOverEnterName, BoxLayout.Y_AXIS));
 
-		JPanel YourScore = new JPanel();
+		JPanel YourScore = new JPanel(){
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+
+				ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "an_1.gif")));
+				g.drawImage(img.getImage(), Settings.UI_FRAME_WIDTH/3 - 100, 0, this);
+			}
+		};
 		YourScore.setOpaque(false);
 		GameOverEnterName.add(YourScore);
 
@@ -611,7 +639,14 @@ public class GameFrame extends JFrame {
 		lblYourScore.setFont(new Font("Segoe UI", Font.PLAIN, 30));
 		YourScore.add(lblYourScore);
 
-		JPanel EnterName = new JPanel();
+		JPanel EnterName = new JPanel(){
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+
+				ImageIcon img = new ImageIcon(Objects.requireNonNull(GameFrame.class.getClassLoader().getResource(Settings.PATH_UI_IMAGES + "an_1.gif")));
+				g.drawImage(img.getImage(), Settings.UI_FRAME_WIDTH/3 - 100, 0, this);
+			}
+		};
 		EnterName.setOpaque(false);
 		GameOverEnterName.add(EnterName);
 
