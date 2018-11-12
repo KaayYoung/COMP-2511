@@ -1,4 +1,5 @@
 # COMP-2511
+GridLock Game
 
 Main features:
 
